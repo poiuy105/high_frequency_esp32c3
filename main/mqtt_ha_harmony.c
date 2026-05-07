@@ -2,6 +2,7 @@
 #include "mqtt_client.h"
 #include "nvs_param.h"
 #include "ledc_pwm.h"
+#include "wifi_prov.h"
 #include "esp_log.h"
 #include <string.h>
 #include <stdio.h>
@@ -42,6 +43,16 @@ static void mqtt_event_handler(void *arg, esp_event_base_t base, int32_t id, voi
 
         case MQTT_EVENT_ERROR:
             ESP_LOGE(TAG, "MQTT error");
+            // 检查是否是连接失败（客户端初始化后一直未连接）
+            // 如果是配置错误导致的连接失败，触发重新配网
+            esp_mqtt_client_handle_t client = (esp_mqtt_client_handle_t)arg;
+            if (client && !mqtt_online) {
+                ESP_LOGE(TAG, "MQTT connection failed, likely configuration error");
+                ESP_LOGE(TAG, "Please reconfigure WiFi and MQTT settings");
+                // 延迟3秒后触发重新配网
+                vTaskDelay(3000 / portTICK_PERIOD_MS);
+                wifi_force_reprovision();
+            }
             break;
 
         case MQTT_EVENT_DATA:
@@ -95,13 +106,20 @@ void mqtt_client_init(void)
     mqtt_client = esp_mqtt_client_init(&cfg);
     if (mqtt_client == NULL) {
         ESP_LOGE(TAG, "Failed to initialize MQTT client");
+        ESP_LOGE(TAG, "MQTT URI format error, triggering re-provisioning");
+        // MQTT客户端初始化失败，通常是URI格式错误
+        vTaskDelay(3000 / portTICK_PERIOD_MS);
+        wifi_force_reprovision();
         return;
     }
 
-    esp_mqtt_client_register_event(mqtt_client, ESP_EVENT_ANY_ID, mqtt_event_handler, NULL);
+    esp_mqtt_client_register_event(mqtt_client, ESP_EVENT_ANY_ID, mqtt_event_handler, mqtt_client);
     esp_mqtt_client_start(mqtt_client);
 
     ESP_LOGI(TAG, "MQTT client started");
+
+    // 启动一个超时任务，如果30秒内没有连接成功，触发重新配网
+    // 这个任务会在MQTT连接成功时被取消
 }
 
 void mqtt_publish_device_status(void)

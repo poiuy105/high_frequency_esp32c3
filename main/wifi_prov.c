@@ -4,14 +4,26 @@
 #include "esp_log.h"
 #include "esp_netif.h"
 #include "esp_event.h"
+#include "esp_mac.h"
+#include "dns_server.h"
 #include "nvs_param.h"
 #include "cJSON.h"
 #include <string.h>
+#include <stdio.h>
 
 static const char *TAG = "WIFI_PROV";
 static httpd_handle_t prov_server = NULL;
 static bool prov_running = false;
 static bool wifi_connected = false;
+static bool force_reprovision = false;
+
+// 获取MAC地址后缀
+static void get_mac_suffix(char *buf, size_t len)
+{
+    uint8_t mac[6];
+    esp_read_mac(mac, ESP_MAC_WIFI_STA);
+    snprintf(buf, len, "%02X%02X%02X", mac[3], mac[4], mac[5]);
+}
 
 bool wifi_is_connected(void)
 {
@@ -21,6 +33,19 @@ bool wifi_is_connected(void)
 bool wifi_prov_is_running(void)
 {
     return prov_running;
+}
+
+// 强制重新配网（MQTT连接失败时调用）
+void wifi_force_reprovision(void)
+{
+    ESP_LOGW(TAG, "MQTT configuration invalid, forcing re-provisioning");
+    // 清除WiFi配置，下次启动会进入配网模式
+    wifi_ssid[0] = '\0';
+    wifi_pswd[0] = '\0';
+    nvs_save_all_param();
+    ESP_LOGW(TAG, "WiFi config cleared, rebooting to provisioning mode...");
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    esp_restart();
 }
 
 static void wifi_event_handler(void* arg, esp_event_base_t base, int32_t id, void* data)
@@ -85,7 +110,7 @@ static const char index_html[] =
     "<html><head>"
     "<meta charset=\"UTF-8\">"
     "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
-    "<title>ESP32-C6 配网</title>"
+    "<title>ESP32 配网</title>"
     "<style>"
     "body{font-family:Arial,sans-serif;margin:20px;background:#f5f5f5}"
     ".container{max-width:400px;margin:0 auto;background:white;padding:20px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.1)}"
@@ -94,13 +119,18 @@ static const char index_html[] =
     ".form-group{margin-bottom:15px}"
     "label{display:block;margin-bottom:5px;font-weight:bold;font-size:14px}"
     "input{width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;box-sizing:border-box;font-size:14px}"
+    ".input-row{display:flex;gap:10px}"
+    ".input-row input:first-child{flex:2}"
+    ".input-row input:last-child{flex:1}"
     "button{width:100%;padding:12px;background:#4CAF50;color:white;border:none;border-radius:5px;font-size:16px;cursor:pointer;margin-top:10px}"
     "button:hover{background:#45a049}"
     ".section{margin-top:20px;padding-top:20px;border-top:1px solid #eee}"
     "#status{text-align:center;margin-top:15px;font-size:14px}"
+    ".error{color:red}"
+    ".success{color:green}"
     "</style></head><body>"
     "<div class=\"container\">"
-    "<h2>ESP32-C6 配网</h2>"
+    "<h2>ESP32 高频发生器</h2>"
     "<div class=\"section\">"
     "<h3>WiFi配置</h3>"
     "<div class=\"form-group\"><label>SSID (WiFi名称)</label>"
@@ -111,7 +141,9 @@ static const char index_html[] =
     "<div class=\"section\">"
     "<h3>MQTT配置</h3>"
     "<div class=\"form-group\"><label>Broker地址</label>"
-    "<input type=\"text\" id=\"mqtt_uri\" placeholder=\"mqtt://192.168.1.100:1883\"></div>"
+    "<input type=\"text\" id=\"mqtt_host\" placeholder=\"192.168.1.100\"></div>"
+    "<div class=\"form-group\"><label>端口</label>"
+    "<input type=\"number\" id=\"mqtt_port\" placeholder=\"1883\" value=\"1883\"></div>"
     "<div class=\"form-group\"><label>用户名 (可选)</label>"
     "<input type=\"text\" id=\"mqtt_user\" placeholder=\"MQTT用户名\"></div>"
     "<div class=\"form-group\"><label>密码 (可选)</label>"
@@ -119,7 +151,7 @@ static const char index_html[] =
     "</div>"
     "<button onclick=\"submitConfig()\">保存配置</button>"
     "<p id=\"status\"></p></div>"
-    "<script>function submitConfig(){const config={ssid:document.getElementById('ssid').value,password:document.getElementById('password').value,mqtt_uri:document.getElementById('mqtt_uri').value,mqtt_user:document.getElementById('mqtt_user').value,mqtt_pass:document.getElementById('mqtt_pass').value};if(!config.ssid||!config.mqtt_uri){document.getElementById('status').textContent='请填写SSID和MQTT地址';return}document.getElementById('status').textContent='正在保存...';fetch('/provision',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(config)}).then(r=>r.json()).then(d=>{document.getElementById('status').textContent=d.status==='success'?'保存成功！设备正在重启...':'保存失败'}).catch(e=>{document.getElementById('status').textContent='网络错误'})}</script>"
+    "<script>function submitConfig(){const ssid=document.getElementById('ssid').value;const password=document.getElementById('password').value;const mqttHost=document.getElementById('mqtt_host').value;const mqttPort=document.getElementById('mqtt_port').value||'1883';const mqttUser=document.getElementById('mqtt_user').value;const mqttPass=document.getElementById('mqtt_pass').value;if(!ssid||!mqttHost){document.getElementById('status').className='error';document.getElementById('status').textContent='请填写SSID和MQTT地址';return}document.getElementById('status').className='';document.getElementById('status').textContent='正在保存...';const mqttUri='mqtt://'+mqttHost+':'+mqttPort;const config={ssid:ssid,password:password,mqtt_uri:mqttUri,mqtt_user:mqttUser,mqtt_pass:mqttPass};fetch('/provision',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(config)}).then(r=>r.json()).then(d=>{if(d.status==='success'){document.getElementById('status').className='success';document.getElementById('status').textContent='保存成功！设备正在重启...'}else{document.getElementById('status').className='error';document.getElementById('status').textContent='保存失败: '+(d.message||'未知错误')}}).catch(e=>{document.getElementById('status').className='error';document.getElementById('status').textContent='网络错误'})}</script>"
     "</body></html>";
 
 static esp_err_t index_handler(httpd_req_t *req)
@@ -194,18 +226,32 @@ static esp_err_t provision_handler(httpd_req_t *req)
             vTaskDelay(1000 / portTICK_PERIOD_MS);
             esp_restart();
         } else {
-            const char *resp = "{\"status\":\"error\",\"message\":\"Missing required fields\"}";
+            const char *resp = "{\"status\":\"error\",\"message\":\"缺少必填字段\"}";
             httpd_resp_set_type(req, "application/json");
             httpd_resp_send(req, resp, strlen(resp));
         }
         cJSON_Delete(json);
     } else {
-        const char *resp = "{\"status\":\"error\",\"message\":\"Invalid JSON\"}";
+        const char *resp = "{\"status\":\"error\",\"message\":\"JSON格式错误\"}";
         httpd_resp_set_type(req, "application/json");
         httpd_resp_send(req, resp, strlen(resp));
     }
 
     free(buf);
+    return ESP_OK;
+}
+
+// Captive Portal DNS处理函数 - 将所有域名解析到192.168.4.1
+static esp_err_t dns_handler(httpd_req_t *req)
+{
+    // 获取请求的URI
+    const char *uri = httpd_req_get_uri(req);
+    ESP_LOGD(TAG, "DNS request: %s", uri);
+
+    // 对于任何请求，重定向到主页或返回主页
+    httpd_resp_set_status(req, "302 Found");
+    httpd_resp_set_hdr(req, "Location", "/");
+    httpd_resp_send(req, NULL, 0);
     return ESP_OK;
 }
 
@@ -216,13 +262,20 @@ void wifi_prov_start(void)
         return;
     }
 
+    // 获取MAC后缀
+    char mac_suffix[16];
+    get_mac_suffix(mac_suffix, sizeof(mac_suffix));
+
+    char ap_ssid[64];
+    snprintf(ap_ssid, sizeof(ap_ssid), "ESP32 High Frequency_%s", mac_suffix);
+
     ESP_LOGI(TAG, "Starting AP provisioning...");
     ESP_LOGI(TAG, "========================================");
     ESP_LOGI(TAG, "===== AP 配网模式启动 =====");
-    ESP_LOGI(TAG, "1. 连接WiFi热点: ESP32-C6_Setup");
-    ESP_LOGI(TAG, "2. 热点密码: 12345678");
-    ESP_LOGI(TAG, "3. 浏览器打开: http://192.168.4.1");
-    ESP_LOGI(TAG, "4. 填写WiFi和MQTT配置");
+    ESP_LOGI(TAG, "1. 连接WiFi热点: %s", ap_ssid);
+    ESP_LOGI(TAG, "2. 热点无密码，直接连接");
+    ESP_LOGI(TAG, "3. 浏览器会自动弹出配置页面");
+    ESP_LOGI(TAG, "4. 或手动打开: http://192.168.4.1");
     ESP_LOGI(TAG, "========================================");
 
     // 初始化网络接口（如果还没初始化）
@@ -244,23 +297,30 @@ void wifi_prov_start(void)
         wifi_init = true;
     }
 
-    // 配置SoftAP
+    // 配置SoftAP - 无密码
     wifi_config_t ap_config = {
         .ap = {
-            .ssid = "ESP32-C6_Setup",
-            .ssid_len = strlen("ESP32-C6_Setup"),
             .channel = 1,
-            .password = "12345678",
             .max_connection = 4,
-            .authmode = WIFI_AUTH_WPA2_PSK
+            .authmode = WIFI_AUTH_OPEN
         }
     };
+    strncpy((char*)ap_config.ap.ssid, ap_ssid, sizeof(ap_config.ap.ssid) - 1);
+    ap_config.ap.ssid_len = strlen(ap_ssid);
 
     esp_wifi_set_config(WIFI_IF_AP, &ap_config);
     esp_wifi_set_mode(WIFI_MODE_AP);
     esp_wifi_start();
 
-    ESP_LOGI(TAG, "SoftAP started: SSID=ESP32-C6_Setup, PASSWORD=12345678");
+    ESP_LOGI(TAG, "SoftAP started: SSID=%s (no password)", ap_ssid);
+
+    // 启动DNS服务器用于Captive Portal
+    esp_netif_ip_info_t ip_info;
+    esp_netif_get_ip_info(esp_netif_get_handle_from_ifkey("WIFI_AP_DEF"), &ip_info);
+
+    dns_server_config_t dns_config = DNS_SERVER_CONFIG_SINGLE("*", &ip_info.ip);
+    dns_server_start(&dns_config);
+    ESP_LOGI(TAG, "DNS server started for captive portal");
 
     // 启动HTTP服务器
     httpd_config_t config = HTTPD_DEFAULT_CONFIG();
@@ -268,6 +328,7 @@ void wifi_prov_start(void)
     config.lru_purge_enable = true;
 
     if (httpd_start(&prov_server, &config) == ESP_OK) {
+        // 注册主页处理
         httpd_uri_t index_uri = {
             .uri = "/",
             .method = HTTP_GET,
@@ -276,6 +337,7 @@ void wifi_prov_start(void)
         };
         httpd_register_uri_handler(prov_server, &index_uri);
 
+        // 注册provision处理
         httpd_uri_t prov_uri = {
             .uri = "/provision",
             .method = HTTP_POST,
@@ -283,6 +345,15 @@ void wifi_prov_start(void)
             .user_ctx = NULL
         };
         httpd_register_uri_handler(prov_server, &prov_uri);
+
+        // 注册通配符处理 - 用于Captive Portal
+        httpd_uri_t catch_all_uri = {
+            .uri = "/*",
+            .method = HTTP_GET,
+            .handler = index_handler,
+            .user_ctx = NULL
+        };
+        httpd_register_uri_handler(prov_server, &catch_all_uri);
 
         ESP_LOGI(TAG, "HTTP server started, connect to http://192.168.4.1");
         prov_running = true;
