@@ -10,27 +10,12 @@
 #include "mqtt_ha_harmony.h"
 #include "key.h"
 #include "rtc_boot_reset.h"
-#include "usb_serial_jtag.h"
 
-// ESP32-C3 使用内置 USB Serial/JTAG 控制器
-// 需要显式初始化驱动以确保控制台输出正常工作
+// ESP32-C3 使用内置 USB Serial/JTAG 控制器作为控制台
+// 通过 sdkconfig.defaults 中的 CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y 配置
+// ESP-IDF 会在启动时自动初始化 USB Serial/JTAG，无需手动调用
 
 static const char *TAG = "MAIN";
-
-// USB Serial/JTAG 初始化函数
-static void usb_serial_jtag_console_init(void)
-{
-    // 安装 USB Serial/JTAG 驱动
-    // 这确保控制台输出正确路由到 USB
-    usb_serial_jtag_driver_config_t usb_config = {
-        .tx_buffer_size = 256,
-        .rx_buffer_size = 256,
-    };
-    usb_serial_jtag_driver_install(&usb_config);
-
-    // 等待USB枚举完成（给主机时间识别设备）
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-}
 
 void led_status_task(void *arg)
 {
@@ -72,10 +57,6 @@ void status_publish_task(void *arg)
 
 void app_main(void)
 {
-    // 首先初始化 USB Serial/JTAG 控制台
-    // 必须在所有日志输出之前完成
-    usb_serial_jtag_console_init();
-
     // 快速上电连击检测恢复出厂
     boot_count_reset_check();
 
@@ -93,7 +74,7 @@ void app_main(void)
 
     // 读取所有掉电保存参数
     nvs_read_all_param();
-    
+
     // GPIO4 状态灯 低电平亮
     gpio_config_t io_conf = {0};
     io_conf.pin_bit_mask = (1ULL << LED_PIN);
