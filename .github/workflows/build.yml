@@ -21,7 +21,7 @@ jobs:
         command: idf.py build
     
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: firmware-bin
         path: |
@@ -39,7 +39,7 @@ jobs:
         cd flash_package && zip -r ../firmware-flash.zip .
     
     - name: Upload flash package
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: firmware-flash-package
         path: firmware-flash.zip
