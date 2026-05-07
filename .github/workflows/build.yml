@@ -41,17 +41,8 @@ jobs:
     - name: Generate merged binary
       run: |
         echo "Generating merged binary using idf.py..."
-        # 使用 idf.py 生成合并的二进制文件
-        cd build
-        python3 -m esptool --chip esp32c3 merge_bin \
-          -o merged.bin \
-          --flash_mode dio \
-          --flash_freq 40m \
-          --flash_size 4MB \
-          0x0 bootloader/bootloader.bin \
-          0x8000 partition_table/partition-table.bin \
-          0x10000 high_frequency.bin
-        cd ..
+        # 使用 idf.py merge-bin 生成合并的二进制文件
+        idf.py merge-bin --output build/merged.bin
         echo "Merged binary generated successfully"
         ls -lh build/merged.bin
     
