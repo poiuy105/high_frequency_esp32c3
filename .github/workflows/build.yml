@@ -13,12 +13,23 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
-    - name: Set up ESP-IDF
+    - name: Set up ESP-IDF and build
       uses: espressif/esp-idf-ci-action@v1
       with:
         esp_idf_version: v5.2.1
         target: esp32c3
-        command: idf.py build
+        command: |
+          idf.py build && \
+          python3 -m esptool --chip esp32c3 merge_bin \
+            -o build/merged.bin \
+            --flash_mode dio \
+            --flash_freq 40m \
+            --flash_size 4MB \
+            0x0 build/bootloader/bootloader.bin \
+            0x8000 build/partition_table/partition-table.bin \
+            0x10000 build/high_frequency.bin && \
+          echo "Merged binary created successfully" && \
+          ls -lh build/merged.bin
     
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
@@ -37,27 +48,6 @@ jobs:
         cp build/partition_table/partition-table.bin flash_package/
         cp build/*.bin flash_package/ || true
         cd flash_package && zip -r ../firmware-flash.zip .
-    
-    - name: Generate merged binary
-      run: |
-        echo "Generating merged binary..."
-        # Find esptool.py in the ESP-IDF environment
-        ESP_TOOL=$(find /opt/esp -name "esptool.py" -type f 2>/dev/null | head -1)
-        if [ -z "$ESP_TOOL" ]; then
-          echo "Error: esptool.py not found"
-          exit 1
-        fi
-        echo "Using esptool at: $ESP_TOOL"
-        python3 "$ESP_TOOL" --chip esp32c3 merge_bin \
-          -o build/merged.bin \
-          --flash_mode dio \
-          --flash_freq 40m \
-          --flash_size 4MB \
-          0x0 build/bootloader/bootloader.bin \
-          0x8000 build/partition_table/partition-table.bin \
-          0x10000 build/high_frequency.bin
-        echo "Merged binary generated successfully"
-        ls -lh build/merged.bin
     
     - name: Upload flash package
       uses: actions/upload-artifact@v4
