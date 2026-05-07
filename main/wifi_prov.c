@@ -155,31 +155,31 @@ static esp_err_t provision_handler(httpd_req_t *req)
 
     cJSON *json = cJSON_Parse(buf);
     if (json) {
-        cJSON *ssid = cJSON_GetObjectItem(json, "ssid");
-        cJSON *pass = cJSON_GetObjectItem(json, "password");
-        cJSON *mqtt_uri = cJSON_GetObjectItem(json, "mqtt_uri");
-        cJSON *mqtt_user = cJSON_GetObjectItem(json, "mqtt_user");
-        cJSON *mqtt_pass = cJSON_GetObjectItem(json, "mqtt_pass");
+        cJSON *ssid_json = cJSON_GetObjectItem(json, "ssid");
+        cJSON *pass_json = cJSON_GetObjectItem(json, "password");
+        cJSON *mqtt_uri_json = cJSON_GetObjectItem(json, "mqtt_uri");
+        cJSON *mqtt_user_json = cJSON_GetObjectItem(json, "mqtt_user");
+        cJSON *mqtt_pass_json = cJSON_GetObjectItem(json, "mqtt_pass");
 
-        if (ssid && mqtt_uri) {
-            strncpy(wifi_ssid, ssid->valuestring, sizeof(wifi_ssid) - 1);
+        if (ssid_json && mqtt_uri_json) {
+            strncpy(wifi_ssid, ssid_json->valuestring, sizeof(wifi_ssid) - 1);
             wifi_ssid[sizeof(wifi_ssid) - 1] = '\0';
 
-            if (pass && pass->valuestring) {
-                strncpy(wifi_pswd, pass->valuestring, sizeof(wifi_pswd) - 1);
+            if (pass_json && pass_json->valuestring) {
+                strncpy(wifi_pswd, pass_json->valuestring, sizeof(wifi_pswd) - 1);
                 wifi_pswd[sizeof(wifi_pswd) - 1] = '\0';
             }
 
-            strncpy(mqtt_uri, mqtt_uri->valuestring, sizeof(mqtt_uri) - 1);
+            strncpy(mqtt_uri, mqtt_uri_json->valuestring, sizeof(mqtt_uri) - 1);
             mqtt_uri[sizeof(mqtt_uri) - 1] = '\0';
 
-            if (mqtt_user && mqtt_user->valuestring) {
-                strncpy(mqtt_user, mqtt_user->valuestring, sizeof(mqtt_user) - 1);
+            if (mqtt_user_json && mqtt_user_json->valuestring) {
+                strncpy(mqtt_user, mqtt_user_json->valuestring, sizeof(mqtt_user) - 1);
                 mqtt_user[sizeof(mqtt_user) - 1] = '\0';
             }
 
-            if (mqtt_pass && mqtt_pass->valuestring) {
-                strncpy(mqtt_pass, mqtt_pass->valuestring, sizeof(mqtt_pass) - 1);
+            if (mqtt_pass_json && mqtt_pass_json->valuestring) {
+                strncpy(mqtt_pass, mqtt_pass_json->valuestring, sizeof(mqtt_pass) - 1);
                 mqtt_pass[sizeof(mqtt_pass) - 1] = '\0';
             }
 
