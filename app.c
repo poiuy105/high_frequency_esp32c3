@@ -95,65 +95,46 @@ static void usb_cdc_init(void)
 
 void app_main(void)
 {
-    // 最早的日志输出，验证程序是否运行到这里
-    printf("\r\n=== APP START ===\r\n");
-    fflush(stdout);
-    vTaskDelay(100 / portTICK_PERIOD_MS);  // 短暂延迟让USB稳定
-    
-    printf("Step 1: Before boot_count_reset_check\r\n");
+    // 最基础的测试：仅输出最简单的信息
+    printf("\r\n*** BASIC TEST START ***\r\n");
     fflush(stdout);
     
+    // 延迟一下，看是否能输出
+    for(int i = 0; i < 5; i++) {
+        printf("Test output #%d\r\n", i+1);
+        fflush(stdout);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
+    
+    printf("Basic test completed.\r\n");
+    fflush(stdout);
+    
+    // 如果能看到这个输出，说明问题在其他初始化代码
+    // 注释掉所有可能导致问题的代码
+    /*
     // 快速上电连击检测恢复出厂
     boot_count_reset_check();
-    
-    printf("Step 2: After boot_count_reset_check\r\n");
-    fflush(stdout);
-    vTaskDelay(100 / portTICK_PERIOD_MS);
 
     // NVS初始化
-    printf("Step 3: Initializing NVS...\r\n");
-    fflush(stdout);
     esp_err_t ret = nvs_flash_init();
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
     {
-        ESP_LOGW(TAG, "Erasing NVS flash");
         ESP_ERROR_CHECK(nvs_flash_erase());
         ret = nvs_flash_init();
     }
-    if (ret != ESP_OK) {
-        printf("NVS init failed: %s\r\n", esp_err_to_name(ret));
-        fflush(stdout);
-        while(1) vTaskDelay(1000 / portTICK_PERIOD_MS);  // 卡住以便看到错误
-    }
     ESP_ERROR_CHECK(ret);
-    printf("Step 4: NVS initialized OK\r\n");
-    fflush(stdout);
-    vTaskDelay(100 / portTICK_PERIOD_MS);
 
 #if CONFIG_ESP_CONSOLE_USB_CDC
-    // 初始化USB CDC控制台（在NVS之后）
-    printf("Step 5: Initializing USB CDC...\r\n");
-    fflush(stdout);
+    // 初始化USB CDC控制台
     usb_cdc_init();
     // 等待USB枚举完成
-    printf("Step 6: Waiting for USB enumeration...\r\n");
-    fflush(stdout);
     vTaskDelay(2000 / portTICK_PERIOD_MS);
     ESP_LOGI(TAG, "System starting with USB CDC console");
-    printf("Step 7: USB CDC should be working now!\r\n");
-    fflush(stdout);
-#else
-    printf("ERROR: USB CDC not enabled in config!\r\n");
-    fflush(stdout);
 #endif
 
     // 读取所有掉电保存参数
-    printf("Step 8: Reading NVS params...\r\n");
-    fflush(stdout);
     nvs_read_all_param();
-    printf("Step 9: NVS params read OK\r\n");
-    fflush(stdout);
-
+    
     // GPIO4 状态灯 低电平亮
     gpio_config_t io_conf = {0};
     io_conf.pin_bit_mask = (1ULL << LED_PIN);
@@ -187,4 +168,6 @@ void app_main(void)
     xTaskCreate(led_status_task, "led_task", 2048, NULL, 2, NULL);
     // 设备状态定时上报
     xTaskCreate(status_publish_task, "status_task", 2048, NULL, 1, NULL);
+    */
+}
 }
