@@ -95,14 +95,6 @@ static void usb_cdc_init(void)
 
 void app_main(void)
 {
-#if CONFIG_ESP_CONSOLE_USB_CDC
-    // 初始化USB CDC控制台
-    usb_cdc_init();
-    // 等待USB枚举完成
-    vTaskDelay(2000 / portTICK_PERIOD_MS);
-    ESP_LOGI(TAG, "System starting with USB CDC console");
-#endif
-
     // 快速上电连击检测恢复出厂
     boot_count_reset_check();
 
@@ -110,10 +102,19 @@ void app_main(void)
     esp_err_t ret = nvs_flash_init();
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
     {
+        ESP_LOGW(TAG, "Erasing NVS flash");
         ESP_ERROR_CHECK(nvs_flash_erase());
         ret = nvs_flash_init();
     }
     ESP_ERROR_CHECK(ret);
+
+#if CONFIG_ESP_CONSOLE_USB_CDC
+    // 初始化USB CDC控制台（在NVS之后）
+    usb_cdc_init();
+    // 等待USB枚举完成
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    ESP_LOGI(TAG, "System starting with USB CDC console");
+#endif
 
     // 读取所有掉电保存参数
     nvs_read_all_param();
