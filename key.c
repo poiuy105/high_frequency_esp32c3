@@ -1,6 +1,7 @@
 #include "key.h"
-#include "driver/gpio.h"
+#include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "driver/gpio.h"
 #include "nvs_param.h"
 #include "esp_system.h"
 
