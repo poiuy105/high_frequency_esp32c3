@@ -8,6 +8,7 @@
 #include <stdio.h>
 
 bool mqtt_online = false;
+static esp_mqtt_client_handle_t mqtt_client = NULL;
 
 #define MQTT_TOPIC_SWITCH   "harmony/pwm/switch"
 #define MQTT_TOPIC_FREQ     "harmony/pwm/freq"
@@ -72,14 +73,16 @@ void mqtt_client_init(void)
     cfg.credentials.username = mqtt_user;
     cfg.credentials.authentication.password = mqtt_pass;
 
-    esp_mqtt_client_handle_t client = esp_mqtt_client_init(&cfg);
-    esp_mqtt_client_register_event(client, ESP_EVENT_ANY_ID, mqtt_event_handler, NULL);
-    esp_mqtt_client_start(client);
+    mqtt_client = esp_mqtt_client_init(&cfg);
+    esp_mqtt_client_register_event(mqtt_client, ESP_EVENT_ANY_ID, mqtt_event_handler, NULL);
+    esp_mqtt_client_start(mqtt_client);
 }
 
 void mqtt_publish_device_status(void)
 {
+    if (mqtt_client == NULL) return;
+    
     char buf[256];
-    snprintf(buf, sizeof(buf), "freq:%d,duty:%d,en:%d", pwm_freq, pwm_duty, pwm_switch);
-    esp_mqtt_client_publish(esp_mqtt_get_client_handle(0), MQTT_TOPIC_STATE, buf, 0, 0, 0);
+    snprintf(buf, sizeof(buf), "freq:%lu,duty:%d,en:%d", (unsigned long)pwm_freq, pwm_duty, pwm_switch);
+    esp_mqtt_client_publish(mqtt_client, MQTT_TOPIC_STATE, buf, 0, 0, 0);
 }
