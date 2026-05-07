@@ -7,8 +7,10 @@
 #include "esp_log.h"
 #include "esp_system.h"
 #include "esp_wifi.h"
+#include "esp_timer.h"
 #include <string.h>
 #include <stdio.h>
+#include <inttypes.h>
 
 bool mqtt_online = false;
 static esp_mqtt_client_handle_t mqtt_client = NULL;
@@ -217,7 +219,7 @@ static void mqtt_publish_all_states(void)
 
     // 运行时间 (秒)
     char uptime_buf[32];
-    snprintf(uptime_buf, sizeof(uptime_buf), "%lld", esp_timer_get_time() / 1000000);
+    snprintf(uptime_buf, sizeof(uptime_buf), "%" PRId64, esp_timer_get_time() / 1000000);
     esp_mqtt_client_publish(mqtt_client, state_uptime_topic, uptime_buf, 0, 1, 0);
 
     // WiFi信号强度
@@ -227,7 +229,7 @@ static void mqtt_publish_all_states(void)
 
     // 空闲内存
     char heap_buf[32];
-    snprintf(heap_buf, sizeof(heap_buf), "%u", esp_get_free_heap_size());
+    snprintf(heap_buf, sizeof(heap_buf), "%lu", (unsigned long)esp_get_free_heap_size());
     esp_mqtt_client_publish(mqtt_client, state_heap_topic, heap_buf, 0, 1, 0);
 }
 
