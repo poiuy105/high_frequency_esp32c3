@@ -10,7 +10,7 @@ void ledc_init_pwm(void)
     ledc_timer_config_t t_cfg = {0};
     t_cfg.speed_mode = LEDC_LOW_SPEED_MODE;
     t_cfg.timer_num = LEDC_TIM;
-    t_cfg.duty_resolution = LEDC_BIT_WIDTH_8_BIT;
+    t_cfg.duty_resolution = LEDC_TIMER_8_BIT;
     t_cfg.freq_hz = pwm_freq;
     ledc_timer_config(&t_cfg);
 
@@ -30,7 +30,7 @@ void ledc_set_pwm_freq(uint32_t freq)
     ledc_timer_config_t t_cfg = {0};
     t_cfg.speed_mode = LEDC_LOW_SPEED_MODE;
     t_cfg.timer_num = LEDC_TIM;
-    t_cfg.duty_resolution = LEDC_BIT_WIDTH_8_BIT;
+    t_cfg.duty_resolution = LEDC_TIMER_8_BIT;
     t_cfg.freq_hz = freq;
     ledc_timer_config(&t_cfg);
 }
