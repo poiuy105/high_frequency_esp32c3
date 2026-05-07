@@ -35,13 +35,13 @@ static char cmd_freq_topic[64];
 static char cmd_duty_topic[64];
 
 // Payload buffers - 增加大小以避免截断
-static char device_info[256];
-static char switch_payload[384];
-static char freq_sensor_payload[384];
-static char duty_sensor_payload[384];
-static char state_sensor_payload[384];
-static char freq_select_payload[768];
-static char duty_select_payload[1024];
+static char device_info[512];
+static char switch_payload[640];
+static char freq_sensor_payload[640];
+static char duty_sensor_payload[640];
+static char state_sensor_payload[640];
+static char freq_select_payload[1024];
+static char duty_select_payload[1280];
 
 // 获取设备唯一标识符
 static void get_device_identifier(void)
