@@ -2,6 +2,8 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
+#include "esp_netif.h"
+#include "esp_wifi.h"
 #include "nvs_flash.h"
 #include "driver/gpio.h"
 #include "nvs_param.h"
@@ -18,10 +20,12 @@ static const char *TAG = "MAIN";
 
 void led_status_task(void *arg)
 {
+    ESP_LOGI(TAG, "LED status task started");
     while(1)
     {
         if(!wifi_is_connected())
         {
+            // WiFi未连接：快闪
             gpio_set_level(LED_PIN, 0);
             vTaskDelay(500 / portTICK_PERIOD_MS);
             gpio_set_level(LED_PIN, 1);
@@ -29,6 +33,7 @@ void led_status_task(void *arg)
         }
         else if(!mqtt_is_connected())
         {
+            // WiFi已连接但MQTT未连接：中速闪
             gpio_set_level(LED_PIN, 0);
             vTaskDelay(200 / portTICK_PERIOD_MS);
             gpio_set_level(LED_PIN, 1);
@@ -36,6 +41,7 @@ void led_status_task(void *arg)
         }
         else
         {
+            // WiFi和MQTT都连接：常亮
             gpio_set_level(LED_PIN, 1);
             vTaskDelay(3000 / portTICK_PERIOD_MS);
         }
@@ -44,6 +50,7 @@ void led_status_task(void *arg)
 
 void status_publish_task(void *arg)
 {
+    ESP_LOGI(TAG, "Status publish task started");
     while(1)
     {
         if(mqtt_is_connected())
@@ -51,6 +58,24 @@ void status_publish_task(void *arg)
             mqtt_publish_device_status();
         }
         vTaskDelay(5000 / portTICK_PERIOD_MS);
+    }
+}
+
+// 等待WiFi连接的辅助函数
+static void wait_for_wifi(int timeout_sec)
+{
+    ESP_LOGI(TAG, "Waiting for WiFi connection...");
+    int count = 0;
+    while (!wifi_is_connected() && count < timeout_sec * 2)
+    {
+        vTaskDelay(500 / portTICK_PERIOD_MS);
+        count++;
+    }
+
+    if (wifi_is_connected()) {
+        ESP_LOGI(TAG, "WiFi connected successfully!");
+    } else {
+        ESP_LOGW(TAG, "WiFi connection timeout, continuing anyway...");
     }
 }
 
@@ -102,7 +127,8 @@ void app_main(void)
     // PWM初始化 上电默认关闭低电平
     ledc_init_pwm();
     ledc_set_pwm_enable(pwm_switch);
-    ESP_LOGI(TAG, "PWM initialized");
+    ESP_LOGI(TAG, "PWM initialized: freq=%lu, duty=%d, switch=%d",
+             (unsigned long)pwm_freq, pwm_duty, pwm_switch);
 
     // 按键初始化
     key_init();
@@ -110,16 +136,30 @@ void app_main(void)
 
     // 小程序AirKiss配网
     wifi_airkiss_start();
-    ESP_LOGI(TAG, "WiFi AirKiss started");
+    ESP_LOGI(TAG, "WiFi/AirKiss started");
+
+    // 等待WiFi连接（最多30秒）
+    wait_for_wifi(30);
 
     // MQTT连接鸿蒙+HA
     mqtt_client_init();
-    ESP_LOGI(TAG, "MQTT client initialized");
 
     // 状态灯任务
     xTaskCreate(led_status_task, "led_task", 2048, NULL, 2, NULL);
     // 设备状态定时上报
     xTaskCreate(status_publish_task, "status_task", 2048, NULL, 1, NULL);
 
+    ESP_LOGI(TAG, "========================================");
     ESP_LOGI(TAG, "All tasks started. System running.");
+    ESP_LOGI(TAG, "WiFi status: %s", wifi_is_connected() ? "Connected" : "Disconnected");
+    ESP_LOGI(TAG, "MQTT status: %s", mqtt_is_connected() ? "Connected" : "Disconnected");
+
+    // 显示设备信息
+    if (wifi_is_connected()) {
+        esp_netif_ip_info_t ip_info;
+        esp_netif_t* netif = esp_netif_get_handle_from_ifkey("WIFI_STA_DEF");
+        if (netif && esp_netif_get_ip_info(netif, &ip_info) == ESP_OK) {
+            ESP_LOGI(TAG, "IP: " IPSTR, IP2STR(&ip_info.ip));
+        }
+    }
 }
