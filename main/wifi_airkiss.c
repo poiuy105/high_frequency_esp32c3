@@ -53,7 +53,7 @@ static void smartconfig_event_handler(void* arg, esp_event_base_t base, int32_t 
 
         case SC_EVENT_GOT_SSID_PSWD:
             ESP_LOGI("SC", "Got SSID and password!");
-            smartconfig_event_got_ssid_pswd_t* evt = (smartconfig_event_got_ssid_pswd*) data;
+            smartconfig_event_got_ssid_pswd_t* evt = (smartconfig_event_got_ssid_pswd_t*) data;
             ESP_LOGI("SC", "SSID: %s", evt->ssid);
 
             // 保存WiFi凭据到NVS
