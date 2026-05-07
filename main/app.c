@@ -2,10 +2,8 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
-#include "esp_system.h"
 #include "nvs_flash.h"
 #include "driver/gpio.h"
-#include "driver/uart.h"
 #include "nvs_param.h"
 #include "ledc_pwm.h"
 #include "wifi_airkiss.h"
@@ -15,7 +13,6 @@
 
 // ESP32-C6 控制台配置
 // UART0: GPIO8(RX), GPIO9(TX) - 硬件串口，可靠输出
-// USB Serial/JTAG: USB接口 - 用于调试
 
 static const char *TAG = "MAIN";
 
@@ -62,7 +59,6 @@ void app_main(void)
     // 立即输出启动信息，确认控制台工作
     ESP_LOGI(TAG, "========================================");
     ESP_LOGI(TAG, "ESP32-C6 System Starting...");
-    ESP_LOGI(TAG, "Chip: %s, %d cores", (const char*)esp_get_model_info(), esp_get_cpu_count());
     ESP_LOGI(TAG, "Console: UART0 (RX=GPIO8, TX=GPIO9)");
     printf("=== ESP32-C6 Firmware Started ===\r\n");
     fflush(stdout);
