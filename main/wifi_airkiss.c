@@ -4,7 +4,6 @@
 #include "esp_event.h"
 #include "esp_netif.h"
 #include "esp_log.h"
-#include "esp_pm.h"
 #include "nvs_param.h"
 #include <string.h>
 
@@ -99,13 +98,6 @@ void wifi_airkiss_start(void)
     ESP_ERROR_CHECK(esp_event_loop_create_default());
     esp_netif_create_default_wifi_sta();
 
-    // 禁用电源管理，确保WiFi始终工作
-    esp_pm_config_t pm_config = {
-        .max_freq_mhz = 160,
-        .min_freq_mhz = 80,
-        .light_sleep_enable = false
-    };
-
     // 初始化WiFi
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
     ESP_ERROR_CHECK(esp_wifi_init(&cfg));
@@ -166,8 +158,6 @@ void wifi_airkiss_start(void)
 
         // 配置SmartConfig参数
         smartconfig_start_config_t sc_cfg = SMARTCONFIG_START_CONFIG_DEFAULT();
-        // 设置超时时间为0（永不超时），持续等待配网
-        sc_cfg.smartconfig_timeout = 0;
 
         smartconfig_running = true;
         ESP_ERROR_CHECK(esp_smartconfig_start(&sc_cfg));
