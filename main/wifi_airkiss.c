@@ -19,11 +19,11 @@ static void wifi_event_handler(void* arg, esp_event_base_t base, int32_t id, voi
     if (base == WIFI_EVENT && id == WIFI_EVENT_STA_START) {
         ESP_LOGI("WIFI", "WiFi STA started");
     }
-    
+
     if (base == WIFI_EVENT && id == WIFI_EVENT_STA_CONNECTED) {
         ESP_LOGI("WIFI", "WiFi connected to AP");
     }
-    
+
     if (base == WIFI_EVENT && id == WIFI_EVENT_STA_DISCONNECTED) {
         wifi_connected = false;
         ESP_LOGW("WIFI", "WiFi disconnected, reconnecting...");
@@ -42,29 +42,28 @@ static void ip_event_handler(void* arg, esp_event_base_t base, int32_t id, void*
 
 static void smartconfig_event_handler(void* arg, esp_event_base_t base, int32_t id, void* data)
 {
-    smartconfig_event_got_ssid_pswd_t* evt = (smartconfig_event_got_ssid_pswd_t*) data;
-    
     switch (id) {
         case SC_EVENT_SCAN_DONE:
-            ESP_LOGI("SC", "Scan done");
+            ESP_LOGI("SC", "Scan done, waiting for SmartConfig packet...");
             break;
-        
+
         case SC_EVENT_FOUND_CHANNEL:
-            ESP_LOGI("SC", "Found channel");
+            ESP_LOGI("SC", "Found channel, receiving data...");
             break;
-        
+
         case SC_EVENT_GOT_SSID_PSWD:
-            ESP_LOGI("SC", "Got SSID and password");
+            ESP_LOGI("SC", "Got SSID and password!");
+            smartconfig_event_got_ssid_pswd_t* evt = (smartconfig_event_got_ssid_pswd*) data;
             ESP_LOGI("SC", "SSID: %s", evt->ssid);
-            
+
             // 保存WiFi凭据到NVS
             strncpy(wifi_ssid, (char*)evt->ssid, sizeof(wifi_ssid) - 1);
             strncpy(wifi_pswd, (char*)evt->password, sizeof(wifi_pswd) - 1);
             nvs_save_all_param();
-            
+
             // 停止SmartConfig
             esp_smartconfig_stop();
-            
+
             // 连接WiFi
             wifi_config_t wifi_config = {0};
             memcpy(wifi_config.sta.ssid, evt->ssid, sizeof(wifi_config.sta.ssid));
@@ -72,7 +71,7 @@ static void smartconfig_event_handler(void* arg, esp_event_base_t base, int32_t 
             esp_wifi_set_config(WIFI_IF_STA, &wifi_config);
             esp_wifi_connect();
             break;
-        
+
         case SC_EVENT_SEND_ACK_DONE:
             ESP_LOGI("SC", "Send ACK done");
             break;
@@ -89,7 +88,7 @@ void wifi_airkiss_start(void)
     // 初始化WiFi
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
     ESP_ERROR_CHECK(esp_wifi_init(&cfg));
-    
+
     // 设置国家码（中国）
     wifi_country_t country = {
         .cc = "CN",
@@ -102,11 +101,11 @@ void wifi_airkiss_start(void)
     // 注册WiFi事件
     ESP_ERROR_CHECK(esp_event_handler_instance_register(
         WIFI_EVENT, ESP_EVENT_ANY_ID, &wifi_event_handler, NULL, NULL));
-    
+
     // 注册IP事件
     ESP_ERROR_CHECK(esp_event_handler_instance_register(
         IP_EVENT, IP_EVENT_STA_GOT_IP, &ip_event_handler, NULL, NULL));
-    
+
     // 注册SmartConfig事件
     ESP_ERROR_CHECK(esp_event_handler_instance_register(
         SC_EVENT, ESP_EVENT_ANY_ID, &smartconfig_event_handler, NULL, NULL));
@@ -114,7 +113,7 @@ void wifi_airkiss_start(void)
     // 启动WiFi
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
     ESP_ERROR_CHECK(esp_wifi_start());
-    
+
     ESP_LOGI("WIFI", "WiFi started, waiting for connection or SmartConfig");
 
     // 如果有保存的SSID，尝试连接
@@ -128,8 +127,15 @@ void wifi_airkiss_start(void)
     } else {
         // 没有保存的SSID，启动SmartConfig
         ESP_LOGI("WIFI", "No saved credentials, starting AirKiss SmartConfig");
+        ESP_LOGI("WIFI", "Please use ESP Touch or AirKiss app to configure");
+
+        // 设置SmartConfig类型为AirKiss
         ESP_ERROR_CHECK(esp_smartconfig_set_type(SC_TYPE_AIRKISS));
+
+        // 配置SmartConfig参数
         smartconfig_start_config_t sc_cfg = SMARTCONFIG_START_CONFIG_DEFAULT();
         ESP_ERROR_CHECK(esp_smartconfig_start(&sc_cfg));
+
+        ESP_LOGI("SC", "SmartConfig started, waiting for phone to send data...");
     }
 }
