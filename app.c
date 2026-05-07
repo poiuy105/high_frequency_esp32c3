@@ -10,11 +10,27 @@
 #include "mqtt_ha_harmony.h"
 #include "key.h"
 #include "rtc_boot_reset.h"
+#include "usb_serial_jtag.h"
 
-// ESP32-C3 使用 USB Serial/JTAG 控制器，无需手动初始化 TinyUSB
-// printf 和 ESP_LOG 会自动输出到 USB Serial/JTAG 控制台
+// ESP32-C3 使用内置 USB Serial/JTAG 控制器
+// 需要显式初始化驱动以确保控制台输出正常工作
 
 static const char *TAG = "MAIN";
+
+// USB Serial/JTAG 初始化函数
+static void usb_serial_jtag_console_init(void)
+{
+    // 安装 USB Serial/JTAG 驱动
+    // 这确保控制台输出正确路由到 USB
+    usb_serial_jtag_driver_config_t usb_config = {
+        .tx_buffer_size = 256,
+        .rx_buffer_size = 256,
+    };
+    usb_serial_jtag_driver_install(&usb_config);
+
+    // 等待USB枚举完成（给主机时间识别设备）
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+}
 
 void led_status_task(void *arg)
 {
@@ -56,6 +72,10 @@ void status_publish_task(void *arg)
 
 void app_main(void)
 {
+    // 首先初始化 USB Serial/JTAG 控制台
+    // 必须在所有日志输出之前完成
+    usb_serial_jtag_console_init();
+
     // 快速上电连击检测恢复出厂
     boot_count_reset_check();
 
