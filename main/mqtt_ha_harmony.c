@@ -34,6 +34,15 @@ static char cmd_switch_topic[64];
 static char cmd_freq_topic[64];
 static char cmd_duty_topic[64];
 
+// Payload buffers - 增加大小以避免截断
+static char device_info[256];
+static char switch_payload[384];
+static char freq_sensor_payload[384];
+static char duty_sensor_payload[384];
+static char state_sensor_payload[384];
+static char freq_select_payload[768];
+static char duty_select_payload[1024];
+
 // 获取设备唯一标识符
 static void get_device_identifier(void)
 {
@@ -81,13 +90,11 @@ static void mqtt_send_discovery(void)
     if (mqtt_client == NULL || !mqtt_online) return;
 
     // 设备信息
-    char device_info[512];
     snprintf(device_info, sizeof(device_info),
              "{\"identifiers\":[\"%s\"],\"name\":\"ESP32 High Frequency\",\"manufacturer\":\"ESP32\",\"model\":\"C6\",\"sw_version\":\"1.0\"}",
              device_identifier);
 
     // 1. Switch Discovery (开关)
-    char switch_payload[512];
     snprintf(switch_payload, sizeof(switch_payload),
              "{\"name\":\"High Frequency Enable\",\"uniq_id\":\"%s_switch\","
              "\"dev\":%s,"
@@ -99,7 +106,6 @@ static void mqtt_send_discovery(void)
     esp_mqtt_client_publish(mqtt_client, disc_switch_config, switch_payload, 0, 1, 0);
 
     // 2. Frequency Sensor Discovery (频率传感器)
-    char freq_sensor_payload[512];
     snprintf(freq_sensor_payload, sizeof(freq_sensor_payload),
              "{\"name\":\"Frequency\",\"uniq_id\":\"%s_freq\","
              "\"dev\":%s,"
@@ -111,7 +117,6 @@ static void mqtt_send_discovery(void)
     esp_mqtt_client_publish(mqtt_client, disc_sensor_freq_config, freq_sensor_payload, 0, 1, 0);
 
     // 3. Duty Sensor Discovery (占空比传感器)
-    char duty_sensor_payload[512];
     snprintf(duty_sensor_payload, sizeof(duty_sensor_payload),
              "{\"name\":\"Duty Cycle\",\"uniq_id\":\"%s_duty\","
              "\"dev\":%s,"
@@ -123,7 +128,6 @@ static void mqtt_send_discovery(void)
     esp_mqtt_client_publish(mqtt_client, disc_sensor_duty_config, duty_sensor_payload, 0, 1, 0);
 
     // 4. State Sensor Discovery (状态传感器)
-    char state_sensor_payload[512];
     snprintf(state_sensor_payload, sizeof(state_sensor_payload),
              "{\"name\":\"Status\",\"uniq_id\":\"%s_state\","
              "\"dev\":%s,"
@@ -133,7 +137,6 @@ static void mqtt_send_discovery(void)
     esp_mqtt_client_publish(mqtt_client, disc_sensor_state_config, state_sensor_payload, 0, 1, 0);
 
     // 5. Frequency Select Discovery (频率选择器)
-    char freq_select_payload[768];
     snprintf(freq_select_payload, sizeof(freq_select_payload),
              "{\"name\":\"Frequency Select\",\"uniq_id\":\"%s_freq_select\","
              "\"dev\":%s,"
@@ -148,7 +151,6 @@ static void mqtt_send_discovery(void)
     esp_mqtt_client_publish(mqtt_client, disc_select_freq_config, freq_select_payload, 0, 1, 0);
 
     // 6. Duty Select Discovery (占空比选择器)
-    char duty_select_payload[1024];
     snprintf(duty_select_payload, sizeof(duty_select_payload),
              "{\"name\":\"Duty Cycle Select\",\"uniq_id\":\"%s_duty_select\","
              "\"dev\":%s,"
