@@ -4,7 +4,12 @@
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
       "Bash(git push *)",
-      "Bash(gh run *)"
+      "Bash(gh run *)",
+      "Bash(git commit *)",
+      "Bash(find /e/Espidf -name \"*smartconfig*\" -o -name \"*smart_config*\" | head -20)",
+      "Read(//e/Espidf/**)",
+      "WebSearch",
+      "Read(//c/Users/HP/.claude/plans/**)"
     ]
   }
 }

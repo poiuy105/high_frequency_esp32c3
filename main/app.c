@@ -8,7 +8,7 @@
 #include "driver/gpio.h"
 #include "nvs_param.h"
 #include "ledc_pwm.h"
-#include "wifi_airkiss.h"
+#include "wifi_prov.h"
 #include "mqtt_ha_harmony.h"
 #include "key.h"
 #include "rtc_boot_reset.h"
@@ -134,9 +134,17 @@ void app_main(void)
     key_init();
     ESP_LOGI(TAG, "Key initialized");
 
-    // 小程序AirKiss配网
-    wifi_airkiss_start();
-    ESP_LOGI(TAG, "WiFi/AirKiss started");
+    // 检查是否有WiFi配置，无配置则启动AP配网
+    if (wifi_ssid[0] == '\0') {
+        ESP_LOGI(TAG, "No WiFi credentials, starting AP provisioning");
+        wifi_prov_start();
+        return;
+    }
+
+    // 有配置则启动WiFi连接
+    ESP_LOGI(TAG, "WiFi credentials found, connecting...");
+    wifi_start_sta();
+    ESP_LOGI(TAG, "WiFi started");
 
     // 等待WiFi连接（最多30秒）
     wait_for_wifi(30);
