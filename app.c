@@ -11,10 +11,8 @@
 #include "key.h"
 #include "rtc_boot_reset.h"
 
-#if CONFIG_ESP_CONSOLE_USB_CDC
-#include "tinyusb.h"
-#include "tusb_cdc_acm.h"
-#endif
+// ESP32-C3 使用 USB Serial/JTAG 控制器，无需手动初始化 TinyUSB
+// printf 和 ESP_LOG 会自动输出到 USB Serial/JTAG 控制台
 
 static const char *TAG = "MAIN";
 
@@ -56,62 +54,8 @@ void status_publish_task(void *arg)
     }
 }
 
-#if CONFIG_ESP_CONSOLE_USB_CDC
-static void usb_cdc_init(void)
-{
-    ESP_LOGI(TAG, "USB CDC initializing...");
-    
-    tinyusb_config_t tusb_cfg = {
-        .descriptor = NULL,
-        .string_descriptor = NULL,
-        .external_phy = false,
-        .configuration_descriptor = NULL,
-    };
-    
-    esp_err_t ret = tinyusb_driver_install(&tusb_cfg);
-    if (ret != ESP_OK) {
-        ESP_LOGE(TAG, "TinyUSB driver install failed: %s", esp_err_to_name(ret));
-        return;
-    }
-    
-    tinyusb_config_cdcacm_t acm_cfg = {
-        .usb_dev = TINYUSB_USBDEV_0,
-        .cdc_port = TINYUSB_CDC_ACM_0,
-        .callback_rx = NULL,
-        .callback_rx_wanted_char = NULL,
-        .callback_line_state_changed = NULL,
-        .callback_line_coding_changed = NULL
-    };
-    
-    ret = tusb_cdc_acm_init(&acm_cfg);
-    if (ret != ESP_OK) {
-        ESP_LOGE(TAG, "CDC ACM init failed: %s", esp_err_to_name(ret));
-        return;
-    }
-    
-    ESP_LOGI(TAG, "USB CDC initialized successfully");
-}
-#endif
-
 void app_main(void)
 {
-    // 最基础的测试：仅输出最简单的信息
-    printf("\r\n*** BASIC TEST START ***\r\n");
-    fflush(stdout);
-    
-    // 延迟一下，看是否能输出
-    for(int i = 0; i < 5; i++) {
-        printf("Test output #%d\r\n", i+1);
-        fflush(stdout);
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-    }
-    
-    printf("Basic test completed.\r\n");
-    fflush(stdout);
-    
-    // 如果能看到这个输出，说明问题在其他初始化代码
-    // 注释掉所有可能导致问题的代码
-    /*
     // 快速上电连击检测恢复出厂
     boot_count_reset_check();
 
@@ -124,13 +68,8 @@ void app_main(void)
     }
     ESP_ERROR_CHECK(ret);
 
-#if CONFIG_ESP_CONSOLE_USB_CDC
-    // 初始化USB CDC控制台
-    usb_cdc_init();
-    // 等待USB枚举完成
-    vTaskDelay(2000 / portTICK_PERIOD_MS);
-    ESP_LOGI(TAG, "System starting with USB CDC console");
-#endif
+    ESP_LOGI(TAG, "System starting with USB Serial/JTAG console");
+    printf("=== ESP32-C3 System Started ===\r\n");
 
     // 读取所有掉电保存参数
     nvs_read_all_param();
@@ -168,5 +107,4 @@ void app_main(void)
     xTaskCreate(led_status_task, "led_task", 2048, NULL, 2, NULL);
     // 设备状态定时上报
     xTaskCreate(status_publish_task, "status_task", 2048, NULL, 1, NULL);
-    */
 }
