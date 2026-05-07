@@ -5,7 +5,6 @@
 #include "esp_netif.h"
 #include "esp_event.h"
 #include "esp_mac.h"
-#include "dns_server.h"
 #include "nvs_param.h"
 #include "cJSON.h"
 #include <string.h>
@@ -241,20 +240,6 @@ static esp_err_t provision_handler(httpd_req_t *req)
     return ESP_OK;
 }
 
-// Captive Portal DNS处理函数 - 将所有域名解析到192.168.4.1
-static esp_err_t dns_handler(httpd_req_t *req)
-{
-    // 获取请求的URI
-    const char *uri = httpd_req_get_uri(req);
-    ESP_LOGD(TAG, "DNS request: %s", uri);
-
-    // 对于任何请求，重定向到主页或返回主页
-    httpd_resp_set_status(req, "302 Found");
-    httpd_resp_set_hdr(req, "Location", "/");
-    httpd_resp_send(req, NULL, 0);
-    return ESP_OK;
-}
-
 void wifi_prov_start(void)
 {
     if (prov_running) {
@@ -313,14 +298,6 @@ void wifi_prov_start(void)
     esp_wifi_start();
 
     ESP_LOGI(TAG, "SoftAP started: SSID=%s (no password)", ap_ssid);
-
-    // 启动DNS服务器用于Captive Portal
-    esp_netif_ip_info_t ip_info;
-    esp_netif_get_ip_info(esp_netif_get_handle_from_ifkey("WIFI_AP_DEF"), &ip_info);
-
-    dns_server_config_t dns_config = DNS_SERVER_CONFIG_SINGLE("*", &ip_info.ip);
-    dns_server_start(&dns_config);
-    ESP_LOGI(TAG, "DNS server started for captive portal");
 
     // 启动HTTP服务器
     httpd_config_t config = HTTPD_DEFAULT_CONFIG();
