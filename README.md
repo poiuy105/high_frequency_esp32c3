@@ -50,8 +50,11 @@ cd high_frequency_esp32c3
 
 1. 访问 `https://github.com/<username>/high_frequency_esp32c3/actions`
 2. 等待编译完成（约5-10分钟）
-3. 下载 `firmware-flash.zip` artifact
-4. 解压得到完整的bin文件
+3. 运行下载脚本获取merged固件：
+   ```powershell
+   .\download_firmware.ps1
+   ```
+4. 固件将保存到 `downloaded_firmware/merged.bin`
 
 ### 3. 本地编译（需要ESP-IDF环境）
 
@@ -71,14 +74,13 @@ idf.py flash monitor
 
 ### 4. 烧录固件
 
-使用esptool.py烧录：
+使用esptool.py烧录merged固件（推荐）：
 
-```bash
-esptool.py --chip esp32c3 --port COM3 write_flash \
-  0x0 bootloader/bootloader.bin \
-  0x8000 partition_table/partition-table.bin \
-  0x10000 high_frequency.bin
+```powershell
+esptool.py --chip esp32c3 --port COM3 write_flash 0x0 downloaded_firmware\merged.bin
 ```
+
+注意：将COM3替换为您的实际串口号
 
 ### 5. 查看USB CDC日志
 
@@ -111,8 +113,9 @@ Windows 10/11会自动识别ESP32-C3的USB CDC为串口设备：
 - 每次推送到main分支自动触发编译
 - 使用ESP-IDF v5.2.1
 - 目标芯片：ESP32-C3
+- 自动生成merged.bin固件（包含bootloader、分区表和应用程序）
 - 编译产物保留30天
-- 提供完整的可烧录bin文件包
+- 提供PowerShell脚本一键下载固件
 
 ## 恢复出厂设置
 
@@ -154,7 +157,8 @@ Windows 10/11会自动识别ESP32-C3的USB CDC为串口设备：
 ├── rtc_boot_reset.c/h     # 快速重启检测
 ├── sdkconfig.defaults     # ESP-IDF默认配置
 ├── .github/workflows/     # GitHub Actions配置
-└── setup_github_repo.sh   # GitHub仓库设置脚本
+├── setup_github_repo.sh   # GitHub仓库设置脚本
+└── download_firmware.ps1  # 固件下载脚本
 ```
 
 ## License

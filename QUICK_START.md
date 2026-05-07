@@ -42,24 +42,46 @@ chmod +x setup_github_repo.sh
 
 ## 📥 下载编译好的固件
 
+### 方法1: 使用自动下载脚本（推荐）
+
+在项目目录下运行PowerShell脚本：
+
+```powershell
+.\download_firmware.ps1
+```
+
+脚本会自动：
+- ✅ 检测GitHub仓库信息
+- ✅ 查找最新成功编译的任务
+- ✅ 下载merged.bin固件到 `downloaded_firmware` 目录
+
+### 方法2: 手动下载
+
+1. 访问 `https://github.com/<你的用户名>/high_frequency_esp32c3/actions`
+2. 点击最新成功的workflow运行
+3. 在页面底部的"Artifacts"部分，点击 `merged-firmware` 下载
+4. 解压得到 `merged.bin` 文件
+
 编译完成后，您会得到以下文件：
 
 ```
-firmware-flash.zip
-├── bootloader.bin          # 启动加载器
-├── partition-table.bin     # 分区表
-└── high_frequency.bin      # 应用程序
+downloaded_firmware/
+└── merged.bin              # 合并后的完整固件（包含bootloader、分区表和应用程序）
 ```
 
 ## 🔧 烧录固件到ESP32-C3
 
-### 方法1: 使用ESP-IDF工具（推荐）
+### 方法1: 使用esptool.py（推荐）
 
-```bash
-idf.py flash monitor
+```powershell
+esptool.py --chip esp32c3 --port COM3 write_flash 0x0 downloaded_firmware\merged.bin
 ```
 
-### 方法2: 使用esptool.py
+注意：将COM3替换为您的实际串口号
+
+### 方法2: 分别烧录各个文件
+
+如果您有单独的文件，也可以分别烧录：
 
 ```bash
 esptool.py --chip esp32c3 --port COM3 write_flash ^

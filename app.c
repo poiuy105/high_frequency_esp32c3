@@ -170,4 +170,3 @@ void app_main(void)
     xTaskCreate(status_publish_task, "status_task", 2048, NULL, 1, NULL);
     */
 }
-}
