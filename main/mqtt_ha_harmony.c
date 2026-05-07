@@ -5,6 +5,8 @@
 #include "wifi_prov.h"
 #include "esp_mac.h"
 #include "esp_log.h"
+#include "esp_system.h"
+#include "esp_wifi.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -18,30 +20,33 @@ static char device_identifier[24] = {0};
 
 // Discovery topics
 static char disc_switch_config[128];
-static char disc_sensor_freq_config[128];
-static char disc_sensor_duty_config[128];
-static char disc_sensor_state_config[128];
-static char disc_select_freq_config[128];
-static char disc_select_duty_config[128];
+static char disc_number_freq_config[128];
+static char disc_number_duty_config[128];
+static char disc_sensor_uptime_config[128];
+static char disc_sensor_wifi_config[128];
+static char disc_sensor_heap_config[128];
 
 // State topics
 static char state_switch_topic[64];
 static char state_freq_topic[64];
 static char state_duty_topic[64];
+static char state_uptime_topic[64];
+static char state_wifi_topic[64];
+static char state_heap_topic[64];
 
 // Command topics
 static char cmd_switch_topic[64];
 static char cmd_freq_topic[64];
 static char cmd_duty_topic[64];
 
-// Payload buffers - 增加大小以避免截断
+// Payload buffers
 static char device_info[512];
 static char switch_payload[1024];
-static char freq_sensor_payload[1024];
-static char duty_sensor_payload[1024];
-static char state_sensor_payload[1024];
-static char freq_select_payload[1280];
-static char duty_select_payload[1536];
+static char freq_number_payload[1024];
+static char duty_number_payload[1024];
+static char uptime_sensor_payload[1024];
+static char wifi_sensor_payload[1024];
+static char heap_sensor_payload[1024];
 
 // 获取设备唯一标识符
 static void get_device_identifier(void)
@@ -58,30 +63,36 @@ static void get_device_identifier(void)
     // 构建所有topic
     snprintf(disc_switch_config, sizeof(disc_switch_config),
              "homeassistant/switch/%s_switch/config", device_identifier);
-    snprintf(disc_sensor_freq_config, sizeof(disc_sensor_freq_config),
-             "homeassistant/sensor/%s_freq/config", device_identifier);
-    snprintf(disc_sensor_duty_config, sizeof(disc_sensor_duty_config),
-             "homeassistant/sensor/%s_duty/config", device_identifier);
-    snprintf(disc_sensor_state_config, sizeof(disc_sensor_state_config),
-             "homeassistant/sensor/%s_state/config", device_identifier);
-    snprintf(disc_select_freq_config, sizeof(disc_select_freq_config),
-             "homeassistant/select/%s_freq/config", device_identifier);
-    snprintf(disc_select_duty_config, sizeof(disc_select_duty_config),
-             "homeassistant/select/%s_duty/config", device_identifier);
+    snprintf(disc_number_freq_config, sizeof(disc_number_freq_config),
+             "homeassistant/number/%s_freq/config", device_identifier);
+    snprintf(disc_number_duty_config, sizeof(disc_number_duty_config),
+             "homeassistant/number/%s_duty/config", device_identifier);
+    snprintf(disc_sensor_uptime_config, sizeof(disc_sensor_uptime_config),
+             "homeassistant/sensor/%s_uptime/config", device_identifier);
+    snprintf(disc_sensor_wifi_config, sizeof(disc_sensor_wifi_config),
+             "homeassistant/sensor/%s_wifi/config", device_identifier);
+    snprintf(disc_sensor_heap_config, sizeof(disc_sensor_heap_config),
+             "homeassistant/sensor/%s_heap/config", device_identifier);
 
     snprintf(state_switch_topic, sizeof(state_switch_topic),
              "%s/switch/state", device_identifier);
     snprintf(state_freq_topic, sizeof(state_freq_topic),
-             "%s/sensor/freq", device_identifier);
+             "%s/number/freq", device_identifier);
     snprintf(state_duty_topic, sizeof(state_duty_topic),
-             "%s/sensor/duty", device_identifier);
+             "%s/number/duty", device_identifier);
+    snprintf(state_uptime_topic, sizeof(state_uptime_topic),
+             "%s/sensor/uptime", device_identifier);
+    snprintf(state_wifi_topic, sizeof(state_wifi_topic),
+             "%s/sensor/wifi", device_identifier);
+    snprintf(state_heap_topic, sizeof(state_heap_topic),
+             "%s/sensor/heap", device_identifier);
 
     snprintf(cmd_switch_topic, sizeof(cmd_switch_topic),
              "%s/switch/cmd", device_identifier);
     snprintf(cmd_freq_topic, sizeof(cmd_freq_topic),
-             "%s/select/freq/cmd", device_identifier);
+             "%s/number/freq/cmd", device_identifier);
     snprintf(cmd_duty_topic, sizeof(cmd_duty_topic),
-             "%s/select/duty/cmd", device_identifier);
+             "%s/number/duty/cmd", device_identifier);
 }
 
 // 发送Discovery配置
@@ -94,78 +105,95 @@ static void mqtt_send_discovery(void)
              "{\"identifiers\":[\"%s\"],\"name\":\"ESP32 High Frequency\",\"manufacturer\":\"ESP32\",\"model\":\"C6\",\"sw_version\":\"1.0\"}",
              device_identifier);
 
-    // 1. Switch Discovery (开关)
+    // 1. Switch Discovery (PWM开关)
     snprintf(switch_payload, sizeof(switch_payload),
-             "{\"name\":\"High Frequency Enable\",\"uniq_id\":\"%s_switch\","
+             "{\"name\":\"PWM Enable\",\"uniq_id\":\"%s_switch\","
              "\"dev\":%s,"
-             "\"cmd_t\":\"%s\","
-             "\"stat_t\":\"%s\","
+             "\"cmd_t\":\"~/%s\","
+             "\"stat_t\":\"~/%s\","
              "\"pl_on\":\"ON\",\"pl_off\":\"OFF\","
-             "\"icon\":\"mdi:pulse\"}",
-             device_identifier, device_info, cmd_switch_topic, state_switch_topic);
+             "\"icon\":\"mdi:pulse\","
+             "\"~\":\"%s\"}",
+             device_identifier, device_info, "switch/cmd", "switch/state", device_identifier);
     esp_mqtt_client_publish(mqtt_client, disc_switch_config, switch_payload, 0, 1, 0);
 
-    // 2. Frequency Sensor Discovery (频率传感器)
-    snprintf(freq_sensor_payload, sizeof(freq_sensor_payload),
+    // 2. Frequency Number Discovery (频率控制)
+    snprintf(freq_number_payload, sizeof(freq_number_payload),
              "{\"name\":\"Frequency\",\"uniq_id\":\"%s_freq\","
              "\"dev\":%s,"
-             "\"stat_t\":\"%s\","
+             "\"cmd_t\":\"~/%s\","
+             "\"stat_t\":\"~/%s\","
+             "\"min\":10000,\"max\":300000,\"step\":1000,"
              "\"unit_of_meas\":\"Hz\","
              "\"icon\":\"mdi:sine-wave\","
-             "\"val_tpl\":\"{{value|float(0)|int}}\"}",
-             device_identifier, device_info, state_freq_topic);
-    esp_mqtt_client_publish(mqtt_client, disc_sensor_freq_config, freq_sensor_payload, 0, 1, 0);
+             "\"mode\":\"box\","
+             "\"~\":\"%s\"}",
+             device_identifier, device_info, "number/freq/cmd", "number/freq", device_identifier);
+    esp_mqtt_client_publish(mqtt_client, disc_number_freq_config, freq_number_payload, 0, 1, 0);
 
-    // 3. Duty Sensor Discovery (占空比传感器)
-    snprintf(duty_sensor_payload, sizeof(duty_sensor_payload),
+    // 3. Duty Number Discovery (占空比控制)
+    snprintf(duty_number_payload, sizeof(duty_number_payload),
              "{\"name\":\"Duty Cycle\",\"uniq_id\":\"%s_duty\","
              "\"dev\":%s,"
-             "\"stat_t\":\"%s\","
+             "\"cmd_t\":\"~/%s\","
+             "\"stat_t\":\"~/%s\","
+             "\"min\":0,\"max\":250,\"step\":1,"
              "\"unit_of_meas\":\"%%\","
              "\"icon\":\"mdi:percent\","
-             "\"val_tpl\":\"{{value|float(0)|int}}\"}",
-             device_identifier, device_info, state_duty_topic);
-    esp_mqtt_client_publish(mqtt_client, disc_sensor_duty_config, duty_sensor_payload, 0, 1, 0);
+             "\"mode\":\"box\","
+             "\"~\":\"%s\"}",
+             device_identifier, device_info, "number/duty/cmd", "number/duty", device_identifier);
+    esp_mqtt_client_publish(mqtt_client, disc_number_duty_config, duty_number_payload, 0, 1, 0);
 
-    // 4. State Sensor Discovery (状态传感器)
-    snprintf(state_sensor_payload, sizeof(state_sensor_payload),
-             "{\"name\":\"Status\",\"uniq_id\":\"%s_state\","
+    // 4. Uptime Sensor Discovery (运行时间)
+    snprintf(uptime_sensor_payload, sizeof(uptime_sensor_payload),
+             "{\"name\":\"Uptime\",\"uniq_id\":\"%s_uptime\","
              "\"dev\":%s,"
-             "\"stat_t\":\"%s\","
-             "\"icon\":\"mdi:check-circle\"}",
-             device_identifier, device_info, state_switch_topic);
-    esp_mqtt_client_publish(mqtt_client, disc_sensor_state_config, state_sensor_payload, 0, 1, 0);
+             "\"stat_t\":\"~/%s\","
+             "\"unit_of_meas\":\"s\","
+             "\"icon\":\"mdi:clock\","
+             "\"entity_category\":\"diagnostic\","
+             "\"~\":\"%s\"}",
+             device_identifier, device_info, "sensor/uptime", device_identifier);
+    esp_mqtt_client_publish(mqtt_client, disc_sensor_uptime_config, uptime_sensor_payload, 0, 1, 0);
 
-    // 5. Frequency Select Discovery (频率选择器)
-    snprintf(freq_select_payload, sizeof(freq_select_payload),
-             "{\"name\":\"Frequency Select\",\"uniq_id\":\"%s_freq_select\","
+    // 5. WiFi Sensor Discovery (WiFi信号强度)
+    snprintf(wifi_sensor_payload, sizeof(wifi_sensor_payload),
+             "{\"name\":\"WiFi Signal\",\"uniq_id\":\"%s_wifi\","
              "\"dev\":%s,"
-             "\"cmd_t\":\"%s\","
-             "\"stat_t\":\"%s\","
-             "\"options\":["
-             "\"20000\",\"30000\",\"40000\",\"50000\",\"60000\",\"70000\",\"80000\","
-             "\"90000\",\"100000\",\"120000\",\"150000\",\"200000\",\"250000\",\"300000\"],"
-             "\"icon\":\"mdi:sine-wave\","
-             "\"retain\":true}",
-             device_identifier, device_info, cmd_freq_topic, state_freq_topic);
-    esp_mqtt_client_publish(mqtt_client, disc_select_freq_config, freq_select_payload, 0, 1, 0);
+             "\"stat_t\":\"~/%s\","
+             "\"unit_of_meas\":\"dBm\","
+             "\"icon\":\"mdi:wifi\","
+             "\"entity_category\":\"diagnostic\","
+             "\"~\":\"%s\"}",
+             device_identifier, device_info, "sensor/wifi", device_identifier);
+    esp_mqtt_client_publish(mqtt_client, disc_sensor_wifi_config, wifi_sensor_payload, 0, 1, 0);
 
-    // 6. Duty Select Discovery (占空比选择器)
-    snprintf(duty_select_payload, sizeof(duty_select_payload),
-             "{\"name\":\"Duty Cycle Select\",\"uniq_id\":\"%s_duty_select\","
+    // 6. Heap Free Sensor Discovery (空闲内存)
+    snprintf(heap_sensor_payload, sizeof(heap_sensor_payload),
+             "{\"name\":\"Free Memory\",\"uniq_id\":\"%s_heap\","
              "\"dev\":%s,"
-             "\"cmd_t\":\"%s\","
-             "\"stat_t\":\"%s\","
-             "\"options\":["
-             "\"0\",\"10\",\"20\",\"30\",\"40\",\"50\",\"60\",\"70\",\"80\",\"90\",\"100\","
-             "\"110\",\"120\",\"130\",\"140\",\"150\",\"160\",\"170\",\"180\",\"190\",\"200\","
-             "\"210\",\"220\",\"230\",\"240\",\"250\"],"
-             "\"icon\":\"mdi:percent\","
-             "\"retain\":true}",
-             device_identifier, device_info, cmd_duty_topic, state_duty_topic);
-    esp_mqtt_client_publish(mqtt_client, disc_select_duty_config, duty_select_payload, 0, 1, 0);
+             "\"stat_t\":\"~/%s\","
+             "\"unit_of_meas\":\"bytes\","
+             "\"icon\":\"mdi:memory\","
+             "\"entity_category\":\"diagnostic\","
+             "\"state_class\":\"measurement\","
+             "\"~\":\"%s\"}",
+             device_identifier, device_info, "sensor/heap", device_identifier);
+    esp_mqtt_client_publish(mqtt_client, disc_sensor_heap_config, heap_sensor_payload, 0, 1, 0);
 
     ESP_LOGI(TAG, "MQTT Discovery configs sent");
+}
+
+// 获取WiFi RSSI
+static int get_wifi_rssi(void)
+{
+    wifi_ap_record_t ap_info;
+    esp_err_t err = esp_wifi_sta_get_ap_info(&ap_info);
+    if (err == ESP_OK) {
+        return ap_info.rssi;
+    }
+    return -127;
 }
 
 // 发布所有状态
@@ -186,6 +214,21 @@ static void mqtt_publish_all_states(void)
     char duty_buf[32];
     snprintf(duty_buf, sizeof(duty_buf), "%d", pwm_duty);
     esp_mqtt_client_publish(mqtt_client, state_duty_topic, duty_buf, 0, 1, 0);
+
+    // 运行时间 (秒)
+    char uptime_buf[32];
+    snprintf(uptime_buf, sizeof(uptime_buf), "%lld", esp_timer_get_time() / 1000000);
+    esp_mqtt_client_publish(mqtt_client, state_uptime_topic, uptime_buf, 0, 1, 0);
+
+    // WiFi信号强度
+    char wifi_buf[32];
+    snprintf(wifi_buf, sizeof(wifi_buf), "%d", get_wifi_rssi());
+    esp_mqtt_client_publish(mqtt_client, state_wifi_topic, wifi_buf, 0, 1, 0);
+
+    // 空闲内存
+    char heap_buf[32];
+    snprintf(heap_buf, sizeof(heap_buf), "%u", esp_get_free_heap_size());
+    esp_mqtt_client_publish(mqtt_client, state_heap_topic, heap_buf, 0, 1, 0);
 }
 
 bool mqtt_is_connected(void)
