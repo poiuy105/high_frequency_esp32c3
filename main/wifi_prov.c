@@ -176,7 +176,18 @@ static esp_err_t captive_portal_handler(httpd_req_t *req)
     // Android/Captive Portal 检测需要返回 204 No Content
     httpd_resp_set_status(req, "204 No Content");
     httpd_resp_send(req, NULL, 0);
-    ESP_LOGI(TAG, "Captive portal detection handled");
+    ESP_LOGI(TAG, "Captive portal detection handled (204 response)");
+    return ESP_OK;
+}
+
+// 通配符路由处理 - 将所有未匹配的请求重定向到主页（用于Captive Portal）
+static esp_err_t redirect_to_captive_handler(httpd_req_t *req)
+{
+    // 对于所有其他请求，重定向到主页
+    httpd_resp_set_status(req, "302 Found");
+    httpd_resp_set_hdr(req, "Location", "/");
+    httpd_resp_send(req, NULL, 0);
+    ESP_LOGI(TAG, "Redirecting to captive portal: %s", req->uri);
     return ESP_OK;
 }
 
@@ -393,14 +404,19 @@ void wifi_prov_start(void)
             }
         }
 
-        // 注册通配符处理 - 用于其他所有请求重定向到主页
+        // 注册通配符处理 - 用于其他所有请求重定向到主页（Captive Portal关键）
         httpd_uri_t catch_all_uri = {
             .uri = "/*",
             .method = HTTP_GET,
-            .handler = index_handler,
+            .handler = redirect_to_captive_handler,  // 使用重定向而不是直接返回
             .user_ctx = NULL
         };
-        httpd_register_uri_handler(prov_server, &catch_all_uri);
+        esp_err_t ret = httpd_register_uri_handler(prov_server, &catch_all_uri);
+        if (ret == ESP_OK) {
+            ESP_LOGI(TAG, "Registered wildcard redirect handler");
+        } else {
+            ESP_LOGW(TAG, "Failed to register wildcard handler (err=%d)", ret);
+        }
 
         ESP_LOGI(TAG, "HTTP server started, connect to http://192.168.4.1");
         prov_running = true;
