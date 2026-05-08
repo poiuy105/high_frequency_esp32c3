@@ -8,6 +8,7 @@
 #include "esp_system.h"
 #include "esp_wifi.h"
 #include "esp_timer.h"
+#include "esp_netif.h"
 #include <string.h>
 #include <stdio.h>
 #include <inttypes.h>
@@ -27,6 +28,7 @@ static char disc_number_duty_config[128];
 static char disc_sensor_uptime_config[128];
 static char disc_sensor_wifi_config[128];
 static char disc_sensor_heap_config[128];
+static char disc_sensor_ip_config[128];
 
 // State topics
 static char state_switch_topic[64];
@@ -35,6 +37,7 @@ static char state_duty_topic[64];
 static char state_uptime_topic[64];
 static char state_wifi_topic[64];
 static char state_heap_topic[64];
+static char state_ip_topic[64];
 
 // Command topics
 static char cmd_switch_topic[64];
@@ -49,6 +52,7 @@ static char duty_number_payload[1024];
 static char uptime_sensor_payload[1024];
 static char wifi_sensor_payload[1024];
 static char heap_sensor_payload[1024];
+static char ip_sensor_payload[1024];
 
 // 获取设备唯一标识符
 static void get_device_identifier(void)
@@ -75,6 +79,8 @@ static void get_device_identifier(void)
              "homeassistant/sensor/%s_wifi/config", device_identifier);
     snprintf(disc_sensor_heap_config, sizeof(disc_sensor_heap_config),
              "homeassistant/sensor/%s_heap/config", device_identifier);
+    snprintf(disc_sensor_ip_config, sizeof(disc_sensor_ip_config),
+             "homeassistant/sensor/%s_ip/config", device_identifier);
 
     snprintf(state_switch_topic, sizeof(state_switch_topic),
              "%s/switch/state", device_identifier);
@@ -88,6 +94,8 @@ static void get_device_identifier(void)
              "%s/sensor/wifi", device_identifier);
     snprintf(state_heap_topic, sizeof(state_heap_topic),
              "%s/sensor/heap", device_identifier);
+    snprintf(state_ip_topic, sizeof(state_ip_topic),
+             "%s/sensor/ip", device_identifier);
 
     snprintf(cmd_switch_topic, sizeof(cmd_switch_topic),
              "%s/switch/cmd", device_identifier);
@@ -173,16 +181,27 @@ static void mqtt_send_discovery(void)
 
     // 6. Heap Free Sensor Discovery (空闲内存)
     snprintf(heap_sensor_payload, sizeof(heap_sensor_payload),
-             "{\"name\":\"Free Memory\",\"uniq_id\":\"%s_heap\","
-             "\"dev\":%s,"
-             "\"stat_t\":\"~/%s\","
-             "\"unit_of_meas\":\"bytes\","
-             "\"icon\":\"mdi:memory\","
-             "\"entity_category\":\"diagnostic\","
-             "\"state_class\":\"measurement\","
+             "{\"name\":\"Free Memory\",\"uniq_id\":\"%s_heap\"," 
+             "\"dev\":%s," 
+             "\"stat_t\":\"~/%s\"," 
+             "\"unit_of_meas\":\"bytes\"," 
+             "\"icon\":\"mdi:memory\"," 
+             "\"entity_category\":\"diagnostic\"," 
+             "\"state_class\":\"measurement\"," 
              "\"~\":\"%s\"}",
              device_identifier, device_info, "sensor/heap", device_identifier);
     esp_mqtt_client_publish(mqtt_client, disc_sensor_heap_config, heap_sensor_payload, 0, 1, 0);
+    
+    // 7. IP Address Sensor Discovery (IP地址)
+    snprintf(ip_sensor_payload, sizeof(ip_sensor_payload),
+             "{\"name\":\"IP Address\",\"uniq_id\":\"%s_ip\"," 
+             "\"dev\":%s," 
+             "\"stat_t\":\"~/%s\"," 
+             "\"icon\":\"mdi:ip-network\"," 
+             "\"entity_category\":\"diagnostic\"," 
+             "\"~\":\"%s\"}",
+             device_identifier, device_info, "sensor/ip", device_identifier);
+    esp_mqtt_client_publish(mqtt_client, disc_sensor_ip_config, ip_sensor_payload, 0, 1, 0);
 
     ESP_LOGI(TAG, "MQTT Discovery configs sent");
 }
@@ -196,6 +215,18 @@ static int get_wifi_rssi(void)
         return ap_info.rssi;
     }
     return -127;
+}
+
+// 获取IP地址
+static void get_ip_address(char *buf, size_t len)
+{
+    esp_netif_ip_info_t ip_info;
+    esp_netif_t* netif = esp_netif_get_handle_from_ifkey("WIFI_STA_DEF");
+    if (netif && esp_netif_get_ip_info(netif, &ip_info) == ESP_OK) {
+        snprintf(buf, len, IPSTR, IP2STR(&ip_info.ip));
+    } else {
+        snprintf(buf, len, "0.0.0.0");
+    }
 }
 
 // 发布所有状态
@@ -231,6 +262,11 @@ static void mqtt_publish_all_states(void)
     char heap_buf[32];
     snprintf(heap_buf, sizeof(heap_buf), "%lu", (unsigned long)esp_get_free_heap_size());
     esp_mqtt_client_publish(mqtt_client, state_heap_topic, heap_buf, 0, 1, 0);
+
+    // IP地址
+    char ip_buf[32];
+    get_ip_address(ip_buf, sizeof(ip_buf));
+    esp_mqtt_client_publish(mqtt_client, state_ip_topic, ip_buf, 0, 1, 0);
 }
 
 bool mqtt_is_connected(void)
