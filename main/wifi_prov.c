@@ -207,18 +207,11 @@ static esp_err_t catch_all_handler(httpd_req_t *req)
         }
     }
 
-    // 对于其他请求，重定向到主页（只对GET和HEAD方法）
-    if (req->method == HTTP_GET || req->method == HTTP_HEAD) {
-        httpd_resp_set_status(req, "302 Found");
-        httpd_resp_set_hdr(req, "Location", "/");
-        httpd_resp_send(req, NULL, 0);
-        ESP_LOGI(TAG, "Redirecting to / for %s", req->uri);
-    } else {
-        // 对于POST/PUT等其他方法，直接返回204
-        httpd_resp_set_status(req, "204 No Content");
-        httpd_resp_send(req, NULL, 0);
-        ESP_LOGI(TAG, "Non-GET method %d for %s, returning 204", req->method, req->uri);
-    }
+    // 对于其他所有请求（包括POST），统一返回204
+    // Android某些检测使用POST方法，必须返回204才能触发弹窗
+    httpd_resp_set_status(req, "204 No Content");
+    httpd_resp_send(req, NULL, 0);
+    ESP_LOGI(TAG, "Returning 204 for %s (method=%d)", req->uri, req->method);
     return ESP_OK;
 }
 
@@ -452,8 +445,8 @@ void wifi_prov_start(void)
             }
         }
 
-        // 注册通配符处理 - 只保留GET和HEAD方法，避免槽位耗尽
-        const httpd_method_t all_methods[] = { HTTP_GET, HTTP_HEAD };
+        // 注册通配符处理 - 支持GET、HEAD和POST方法，避免405错误
+        const httpd_method_t all_methods[] = { HTTP_GET, HTTP_HEAD, HTTP_POST };
 
         for (int i = 0; i < sizeof(all_methods)/sizeof(all_methods[0]); i++) {
             httpd_uri_t catch_all_uri = {
