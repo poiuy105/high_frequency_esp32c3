@@ -186,32 +186,49 @@ static esp_err_t catch_all_handler(httpd_req_t *req)
     // 记录请求信息
     ESP_LOGI(TAG, "Catch-all: method=%d, uri=%s", req->method, req->uri);
 
-    // 对于Android/iOS的captive portal检测URL，返回204
+    // 定义Android/iOS captive portal检测URL列表
     const char* detection_urls[] = {
         "/generate_204",
         "/gen_204",
-        "/favicon.ico",
         "/hotspot-detect.html",
         "/connecttest.txt",
-        "/success.txt",
+        "/ncsi.txt",
+        "/favicon.ico",
         NULL
     };
 
-    // 检查是否是检测URL
+    // 检查是否是已知的检测URL
+    bool is_detection_url = false;
     for (int i = 0; detection_urls[i] != NULL; i++) {
         if (strcmp(req->uri, detection_urls[i]) == 0) {
-            httpd_resp_set_status(req, "204 No Content");
-            httpd_resp_send(req, NULL, 0);
-            ESP_LOGI(TAG, "Detection URL handled with 204: %s", req->uri);
-            return ESP_OK;
+            is_detection_url = true;
+            break;
         }
     }
 
-    // 对于其他所有请求（包括POST），统一返回204
-    // Android某些检测使用POST方法，必须返回204才能触发弹窗
-    httpd_resp_set_status(req, "204 No Content");
-    httpd_resp_send(req, NULL, 0);
-    ESP_LOGI(TAG, "Returning 204 for %s (method=%d)", req->uri, req->method);
+    // 策略：
+    // 1. 已知检测URL → 返回204
+    // 2. POST请求 → 返回204（Android某些检测用POST）
+    // 3. GET/HEAD其他请求 → 重定向到主页，让用户看到配网页面
+    
+    if (is_detection_url || req->method == HTTP_POST) {
+        // 检测URL或POST请求，返回204
+        httpd_resp_set_status(req, "204 No Content");
+        httpd_resp_send(req, NULL, 0);
+        ESP_LOGI(TAG, "Detection/POST request handled with 204: %s", req->uri);
+    } else if (req->method == HTTP_GET || req->method == HTTP_HEAD) {
+        // 其他GET/HEAD请求，重定向到主页
+        httpd_resp_set_status(req, "302 Found");
+        httpd_resp_set_hdr(req, "Location", "/");
+        httpd_resp_send(req, NULL, 0);
+        ESP_LOGI(TAG, "Redirecting unknown GET request to /: %s", req->uri);
+    } else {
+        // 其他方法，返回204
+        httpd_resp_set_status(req, "204 No Content");
+        httpd_resp_send(req, NULL, 0);
+        ESP_LOGI(TAG, "Other method handled with 204: %s", req->uri);
+    }
+    
     return ESP_OK;
 }
 
