@@ -170,6 +170,16 @@ static esp_err_t index_handler(httpd_req_t *req)
     return ESP_OK;
 }
 
+// Captive Portal 检测处理 - 返回204 No Content
+static esp_err_t captive_portal_handler(httpd_req_t *req)
+{
+    // Android/Captive Portal 检测需要返回 204 No Content
+    httpd_resp_set_status(req, "204 No Content");
+    httpd_resp_send(req, NULL, 0);
+    ESP_LOGI(TAG, "Captive portal detection handled");
+    return ESP_OK;
+}
+
 static esp_err_t provision_handler(httpd_req_t *req)
 {
     int total_len = req->content_len;
@@ -362,7 +372,32 @@ void wifi_prov_start(void)
         };
         httpd_register_uri_handler(prov_server, &prov_uri);
 
-        // 注册通配符处理 - 用于Captive Portal
+        // 注册 Captive Portal 检测 URL - Android/iOS/Windows
+        const char* captive_urls[] = {
+            "/generate_204",
+            "/gen_204",
+            "/library/test/success.html",
+            "/hotspot-detect.html",
+            "/connecttest.txt",
+            "/redirect",
+            "/success.txt",
+            "/ncsi.txt"
+        };
+        
+        for (int i = 0; i < sizeof(captive_urls)/sizeof(captive_urls[0]); i++) {
+            httpd_uri_t captive_uri = {
+                .uri = captive_urls[i],
+                .method = HTTP_GET,
+                .handler = captive_portal_handler,
+                .user_ctx = NULL
+            };
+            httpd_register_uri_handler(prov_server, &captive_uri);
+        }
+        
+        ESP_LOGI(TAG, "Registered %d captive portal detection URLs", 
+                 sizeof(captive_urls)/sizeof(captive_urls[0]));
+
+        // 注册通配符处理 - 用于其他所有请求重定向到主页
         httpd_uri_t catch_all_uri = {
             .uri = "/*",
             .method = HTTP_GET,

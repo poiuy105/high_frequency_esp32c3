@@ -1,0 +1,479 @@
+[09:10:59]I (10889) WIFI_PROV: DNS server socket created
+[09:10:59]I (10889) WIFI_PROV: DNS server bound to port 53
+[09:10:59]I (20899) WIFI_PROV: DNS server socket created
+[09:10:59]I (20899) WIFI_PROV: DNS server bound to port 53
+[09:10:59]I (30909) WIFI_PROV: DNS server socket created
+[09:10:59]I (30909) WIFI_PROV: DNS server bound to port 53
+[09:10:59]I (40919) WIFI_PROV: DNS server socket created
+[09:10:59]I (40919) WIFI_PROV: DNS server bound to port 53
+[09:10:59]I (50929) WIFI_PROV: DNS server socket created
+[09:10:59]I (50929) WIFI_PROV: DNS server bound to port 53
+[09:10:59]I (60939) WIFI_PROV: DNS server socket created
+[09:10:59]I (60939) WIFI_PROV: DNS server bound to port 53
+[09:10:59]I (70949) WIFI_PROV: DNS server socket created
+[09:10:59]I (70949) WIFI_PROV: DNS server bound to port 53
+[09:10:59]I (80959) WIFI_PROV: DNS server socket created
+[09:10:59]I (80959) WIFI_PROV: DNS server bound to port 53
+[09:10:59]I (90969) WIFI_PROV: DNS server socket created
+[09:10:59]I (90969) WIFI_PROV: DNS server bound to port 53
+[09:10:59]I (100979) WIFI_PROV: DNS server socket created
+[09:10:59]I (100979) WIFI_PROV: DNS server bound to port 53
+[09:10:59]I (110989) WIFI_PROV: DNS server socket created
+[09:10:59]I (110989) WIFI_PROV: DNS server bound to port 53
+[09:10:59]I (120999) WIFI_PROV: DNS server socket created
+[09:10:59]I (120999) WIFI_PROV: DNS server bound to port 53
+[09:10:59]I (131009) WIFI_PROV: DNS server socket created
+[09:10:59]I (131009) WIFI_PROV: DNS server bound to port 53
+[09:10:59]I (141019) WIFI_PROV: DNS server socket created
+[09:10:59]I (141019) WIFI_PROV: DNS server bound to port 53
+[09:10:59]I (151029) WIFI_PROV: DNS server socket created
+[09:10:59]I (151029) WIFI_PROV: DNS server bound to port 53
+[09:10:59]I (161039) WIFI_PROV: DNS server socket created
+[09:10:59]I (161039) WIFI_PROV: DNS server bound to port 53
+[09:10:59]I (171049) WIFI_PROV: DNS server socket created
+[09:10:59]I (171049) WIFI_PROV: DNS server bound to port 53
+[09:10:59]I (181059) WIFI_PROV: DNS server socket created
+[09:10:59]I (181059) WIFI_PROV: DNS server bound to port 53
+[09:10:59]I (191069) WIFI_PROV: DNS server socket created
+[09:10:59]I (191069) WIFI_PROV: DNS server bound to port 53
+[09:10:59]I (195839) wifi:new:<1,1>, old:<1,1>, ap:<1,1>, sta:<255,255>, prof:1
+[09:10:59]I (195839) wifi:(trc)phytype:HT40-LGI, snr:6, maxRate:0, highestRateIdx:1
+[09:10:59]I (195839) wifi:(trc)rate(LP-1Mbps, schedIdx:11), ampdu(rate:L-MCS0, schedIdx(8, stop:8)), snr:6, ampduState:wait operational
+[09:10:59]I (195849) wifi:ifidx:1, rssi:-91, nf:-97, phytype(0x4, HT40-LGI), phymode(0x3, 11bgn), max_rate:0, he:0
+[09:10:59]I (195859) wifi:max ampdu length exponent:3(65535 bytes), mmss:4(2 us)
+[09:10:59]I (195869) wifi:station: 42:c9:ac:b2:f4:50 join, AID=1, bgn, 40U
+[09:10:59]W (195989) wifi:<ba-add>idx:4, ifx:1, tid:0, TAHI:0x10150f4, TALO:0xb2acc942, (ssn:0, win:64, cur_ssn:0), CONF:0xc0000005
+[09:10:59]I (197289) esp_netif_lwip: DHCP server assigned IP to a client, IP is: 192.168.4.2
+[09:10:59]I (197459) wifi:[ADDBA]TX addba request, tid:0, dialogtoken:1, bufsize:64, A-MSDU:0(not supported), policy:1(IMR), ssn:0(0x0)
+[09:10:59]I (197569) wifi:[ADDBA]RX addba response, status:0, tid:0/tb:1(0xa1), bufsize:64, batimeout:0, txa_wnd:64
+[09:10:59]I (197589) WIFI_PROV: DNS request received from 0.0.0.0
+[09:10:59]I (197589) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1
+[09:10:59]I (197599) WIFI_PROV: DNS server socket created
+[09:10:59]I (197599) WIFI_PROV: DNS server bound to port 53
+[09:10:59]W (197779) httpd_uri: httpd_uri: URI '/generate_204_46202c6c-e4a7-4fd0-994b-5729abb8ec48' not found
+[09:10:59]W (197779) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
+[09:10:59]I (197949) WIFI_PROV: DNS request received from 0.0.0.0
+[09:10:59]I (197959) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1
+[09:10:59]I (197969) WIFI_PROV: DNS server socket created
+[09:10:59]I (197969) WIFI_PROV: DNS server bound to port 53
+[09:10:59]W (198029) httpd_uri: httpd_uri: URI '/generate_204' not found
+[09:10:59]W (198029) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
+[09:10:59]I (198289) wifi:station: 42:c9:ac:b2:f4:50 leave, AID = 1, bss_flags is 33688675, bss:0x40822adc
+[09:10:59]I (198289) wifi:ifidx:1, rssi:-88, nf:-97, phytype(0x4, HT40-LGI), phymode(0x3, 11bgn), max_rate:0, he:0
+[09:10:59]I (198299) wifi:max ampdu length exponent:3(65535 bytes), mmss:4(2 us)
+[09:10:59]I (198299) wifi:new:<1,0>, old:<1,1>, ap:<1,1>, sta:<255,255>, prof:1
+[09:10:59]I (198309) wifi:<ba-del>idx:4, tid:0
+[09:10:59]I (207979) WIFI_PROV: DNS server socket created
+[09:10:59]I (207979) WIFI_PROV: DNS server bound to port 53
+[09:10:59]I (217989) WIFI_PROV: DNS server socket created
+[09:10:59]I (217989) WIFI_PROV: DNS server bound to port 53
+[09:10:59]I (227999) WIFI_PROV: DNS server socket created
+[09:10:59]I (227999) WIFI_PROV: DNS server bound to port 53
+[09:10:59]I (238009) WIFI_PROV: DNS server socket created
+[09:10:59]I (238009) WIFI_PROV: DNS server bound to port 53
+[09:11:02]ESP-ROM:esp32c6-20220919
+[09:11:02]Build:Sep 19 2022
+[09:11:02]rst:0x15 (USB_UART_HPSYS),boot:0xc (SPI_FAST_FLASH_BOOT)
+[09:11:02]Saved PC:0x40805574
+[09:11:02]SPIWP:0xee
+[09:11:02]mode:DIO, clock div:2
+[09:11:02]load:0x40875720,len:0x1804
+[09:11:02]load:0x4086c410,len:0xe58
+[09:11:02]load:0x4086e610,len:0x2e24
+[09:11:02]entry 0x4086c41a
+[09:11:02]I (5) boot: ESP-IDF v5.2.1 2nd stage bootloader
+[09:11:02]I (5) boot: compile time May  8 2026 00:58:31
+[09:11:02]I (6) boot: chip revision: v0.2
+[09:11:02]I (8) boot.esp32c6: SPI Speed      : 80MHz
+[09:11:02]I (12) boot.esp32c6: SPI Mode       : DIO
+[09:11:02]I (17) boot.esp32c6: SPI Flash Size : 2MB
+[09:11:02]I (22) boot: Enabling RNG early entropy source...
+[09:11:02]I (27) boot: Partition Table:
+[09:11:02]I (31) boot: ## Label            Usage          Type ST Offset   Length
+[09:11:02]I (38) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+[09:11:02]I (45) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+[09:11:02]I (53) boot:  2 factory          factory app      00 00 00010000 00100000
+[09:11:02]I (61) boot: End of partition table
+[09:11:02]I (65) esp_image: segment 0: paddr=00010020 vaddr=420b8020 size=2b6d0h (177872) map
+[09:11:02]I (110) esp_image: segment 1: paddr=0003b6f8 vaddr=40800000 size=04920h ( 18720) load
+[09:11:02]I (115) esp_image: segment 2: paddr=00040020 vaddr=42000020 size=b4c14h (740372) map
+[09:11:02]I (269) esp_image: segment 3: paddr=000f4c3c vaddr=40804920 size=1121ch ( 70172) load
+[09:11:02]I (286) esp_image: segment 4: paddr=00105e60 vaddr=40815b40 size=0362ch ( 13868) load
+[09:11:02]I (295) boot: Loaded app from partition at offset 0x10000
+[09:11:02]I (296) boot: Disabling RNG early entropy source...
+[09:11:02]I (307) cpu_start: Unicore app
+[09:11:02]W (316) clk: esp_perip_clk_init() has not been implemented yet
+[09:11:02]I (323) cpu_start: Pro cpu start user code
+[09:11:02]I (323) cpu_start: cpu freq: 160000000 Hz
+[09:11:02]I (323) cpu_start: Application information:
+[09:11:02]I (326) cpu_start: Project name:     high_frequency
+[09:11:02]I (331) cpu_start: App version:      8fe593c
+[09:11:02]I (336) cpu_start: Compile time:     May  8 2026 00:58:25
+[09:11:02]I (342) cpu_start: ELF file SHA256:  23deaa0a3...
+[09:11:02]I (348) cpu_start: ESP-IDF:          v5.2.1
+[09:11:02]I (352) cpu_start: Min chip rev:     v0.0
+[09:11:02]I (357) cpu_start: Max chip rev:     v0.99 
+[09:11:02]I (362) cpu_start: Chip rev:         v0.2
+[09:11:02]I (367) heap_init: Initializing. RAM available for dynamic allocation:
+[09:11:02]I (374) heap_init: At 40820860 len 0005BDB0 (367 KiB): RAM
+[09:11:02]I (380) heap_init: At 4087C610 len 00002F54 (11 KiB): RAM
+[09:11:02]I (386) heap_init: At 50000000 len 00003FE8 (15 KiB): RTCRAM
+[09:11:02]I (393) spi_flash: detected chip: generic
+[09:11:02]I (397) spi_flash: flash io: dio
+[09:11:02]W (401) spi_flash: Detected size(16384k) larger than the size in the binary image header(2048k). Using the size in the binary image header.
+[09:11:02]I (415) sleep: Configure to isolate all GPIO pins in sleep state
+[09:11:02]I (421) sleep: Enable automatic switching of GPIO sleep configuration
+[09:11:02]I (428) coexist: coex firmware version: 77cd7f8
+[09:11:02]I (434) coexist: coexist rom version 5b8dcfa
+[09:11:02]I (439) main_task: Started on CPU0
+[09:11:02]I (439) main_task: Calling app_main()
+[09:11:02]I (439) MAIN: ========================================
+[09:11:02]I (449) MAIN: ESP32-C6 System Starting...
+[09:11:02]I (449) MAIN: Console: UART0 (RX=GPIO8, TX=GPIO9)
+[09:11:02]I (469) MAIN: NVS initialized successfully
+[09:11:02]W (469) NVS: NVS open failed: ESP_ERR_NVS_NOT_FOUND, using defaults
+[09:11:02]I (469) MAIN: Parameters loaded from NVS
+[09:11:02]I (479) gpio: GPIO[4]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 
+[09:11:02]I (489) gpio: GPIO[9]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 
+[09:11:02]I (499) MAIN: GPIO initialized: LED=4, KEY=9
+[09:11:02]I (499) MAIN: PWM initialized: freq=200000, duty=128, switch=0
+[09:11:02]I (509) MAIN: Key initialized
+[09:11:02]I (509) MAIN: No WiFi credentials, starting AP provisioning
+[09:11:02]I (519) WIFI_PROV: Starting AP provisioning...
+[09:11:02]I (519) WIFI_PROV: ========================================
+[09:11:03]I (529) WIFI_PROV: ===== AP 配网模式启动 =====
+[09:11:03]I (539) WIFI_PROV: 1. 连接WiFi热点: ESP32 High Frequency_379DA8
+[09:11:03]I (539) WIFI_PROV: 2. 热点无密码，直接连接
+[09:11:03]I (549) WIFI_PROV: 3. 浏览器会自动弹出配置页面
+[09:11:03]I (549) WIFI_PROV: 4. 或手动打开: http://192.168.4.1
+[09:11:03]I (559) WIFI_PROV: ========================================
+[09:11:03]I (569) pp: pp rom version: 5b8dcfa
+[09:11:03]I (569) net80211: net80211 rom version: 5b8dcfa
+[09:11:03]I (589) wifi:wifi driver task: 408296e4, prio:23, stack:6656, core=0
+[09:11:03]I (589) wifi:wifi firmware version: a9f5b59
+[09:11:03]I (589) wifi:wifi certification version: v7.0
+[09:11:03]I (589) wifi:config NVS flash: enabled
+[09:11:03]I (589) wifi:config nano formating: disabled
+[09:11:03]I (599) wifi:mac_version:HAL_MAC_ESP32AX_761,ut_version:N
+[09:11:03]I (599) wifi:Init data frame dynamic rx buffer num: 32
+[09:11:03]I (609) wifi:Init static rx mgmt buffer num: 5
+[09:11:03]I (609) wifi:Init management short buffer num: 32
+[09:11:03]I (619) wifi:Init dynamic tx buffer num: 32
+[09:11:03]I (619) wifi:Init static tx FG buffer num: 2
+[09:11:03]I (619) wifi:Init static rx buffer size: 1700
+[09:11:03]I (629) wifi:Init static rx buffer num: 10
+[09:11:03]I (629) wifi:Init dynamic rx buffer num: 32
+[09:11:03]I (639) wifi_init: rx ba win: 6
+[09:11:03]I (639) wifi_init: tcpip mbox: 32
+[09:11:03]I (639) wifi_init: udp mbox: 6
+[09:11:03]I (649) wifi_init: tcp mbox: 6
+[09:11:03]I (649) wifi_init: tcp tx win: 5760
+[09:11:03]I (649) wifi_init: tcp rx win: 5760
+[09:11:03]I (659) wifi_init: tcp mss: 1440
+[09:11:03]I (659) wifi_init: WiFi IRAM OP enabled
+[09:11:03]I (669) wifi_init: WiFi RX IRAM OP enabled
+[09:11:03]I (669) phy_init: phy_version 250,e14681b,Jan 24 2024,17:43:11
+[09:11:03]W (759) wifi:(bf)761:0x600a7cac:0x01b4b4b0
+[09:11:03]W (769) wifi:(agc)0x600a7128:0xd2005800, min.avgNF:0xce->0xd2(dB), RCalCount:0x5, min.RRssi:0x800(-128.00)
+[09:11:03]W (769) wifi:(TB)WDEV_PWR_TB_MCS0:19
+[09:11:03]W (769) wifi:(TB)WDEV_PWR_TB_MCS1:19
+[09:11:03]W (769) wifi:(TB)WDEV_PWR_TB_MCS2:19
+[09:11:03]W (779) wifi:(TB)WDEV_PWR_TB_MCS3:19
+[09:11:03]W (779) wifi:(TB)WDEV_PWR_TB_MCS4:19
+[09:11:03]W (779) wifi:(TB)WDEV_PWR_TB_MCS5:19
+[09:11:03]W (789) wifi:(TB)WDEV_PWR_TB_MCS6:18
+[09:11:03]W (789) wifi:(TB)WDEV_PWR_TB_MCS7:18
+[09:11:03]W (789) wifi:(TB)WDEV_PWR_TB_MCS8:17
+[09:11:03]W (799) wifi:(TB)WDEV_PWR_TB_MCS9:15
+[09:11:03]W (799) wifi:(TB)WDEV_PWR_TB_MCS10:15
+[09:11:03]W (799) wifi:(TB)WDEV_PWR_TB_MCS11:15
+[09:11:03]I (809) wifi:11ax coex: WDEVAX_PTI0(0x55777555), WDEVAX_PTI1(0x00003377).
+[09:11:03]
+[09:11:03]I (809) wifi:mode : softAP (58:8c:81:37:9d:a9)
+[09:11:03]I (819) wifi:Total power save buffer number: 16
+[09:11:03]I (819) wifi:Init max length of beacon: 752/752
+[09:11:03]I (829) wifi:Init max length of beacon: 752/752
+[09:11:03]I (829) esp_netif_lwip: DHCP server started on interface WIFI_AP_DEF with IP: 192.168.4.1
+[09:11:03]I (839) WIFI_PROV: SoftAP started: SSID=ESP32 High Frequency_379DA8 (no password)
+[09:11:03]I (849) WIFI_PROV: DHCP server configured with DNS: 192.168.4.1
+[09:11:03]I (849) WIFI_PROV: DNS server socket created
+[09:11:03]I (859) WIFI_PROV: DNS server bound to port 53
+[09:11:03]I (859) WIFI_PROV: DNS hijacking server started
+[09:11:03]I (869) WIFI_PROV: HTTP server started, connect to http://192.168.4.1
+[09:11:03]I (879) main_task: Returned from app_main()
+[09:11:09]I (7119) wifi:new:<1,1>, old:<1,1>, ap:<1,1>, sta:<255,255>, prof:1
+[09:11:09]I (7119) wifi:(trc)phytype:HT40-LGI, snr:34, maxRate:0, highestRateIdx:1
+[09:11:09]I (7119) wifi:(trc)rate(L-MCS7, schedIdx:1), ampdu(rate:L-MCS7, schedIdx(1, stop:8)), snr:34, ampduState:wait operational
+[09:11:09]I (7139) wifi:ifidx:1, rssi:-63, nf:-97, phytype(0x4, HT40-LGI), phymode(0x3, 11bgn), max_rate:0, he:0
+[09:11:09]I (7139) wifi:max ampdu length exponent:3(65535 bytes), mmss:5(4 us)
+[09:11:09]I (7149) wifi:station: 26:5d:d2:00:33:9a join, AID=1, bgn, 40U
+[09:11:09]W (7299) wifi:<ba-add>idx:4, ifx:1, tid:0, TAHI:0x1019a33, TALO:0xd25d26, (ssn:0, win:64, cur_ssn:0), CONF:0xc0000005
+[09:11:09]I (7309) esp_netif_lwip: DHCP server assigned IP to a client, IP is: 192.168.4.2
+[09:11:09]I (7389) wifi:[ADDBA]TX addba request, tid:0, dialogtoken:1, bufsize:64, A-MSDU:0(not supported), policy:1(IMR), ssn:0(0x0)
+[09:11:09]I (7399) wifi:[ADDBA]RX addba response, status:0, tid:0/tb:1(0xa1), bufsize:64, batimeout:0, txa_wnd:64
+[09:11:09]I (7479) WIFI_PROV: DNS request received from 0.0.0.0
+[09:11:09]I (7489) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1
+[09:11:09]I (7499) WIFI_PROV: DNS server socket created
+[09:11:09]I (7499) WIFI_PROV: DNS server bound to port 53
+[09:11:10]W (7579) httpd_uri: httpd_uri: URI '/generate_204' not found
+[09:11:10]W (7579) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
+[09:11:12]I (10209) WIFI_PROV: DNS request received from 0.0.0.0
+[09:11:12]I (10209) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1
+[09:11:12]I (10219) WIFI_PROV: DNS server socket created
+[09:11:12]I (10219) WIFI_PROV: DNS server bound to port 53
+[09:11:12]I (10219) WIFI_PROV: DNS request received from 0.0.0.0
+[09:11:12]I (10229) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1
+[09:11:12]I (10239) WIFI_PROV: DNS server socket created
+[09:11:12]I (10239) WIFI_PROV: DNS server bound to port 53
+[09:11:12]I (10349) WIFI_PROV: DNS request received from 0.0.0.0
+[09:11:12]I (10349) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1
+[09:11:12]I (10359) WIFI_PROV: DNS server socket created
+[09:11:12]I (10359) WIFI_PROV: DNS server bound to port 53
+[09:11:14]I (12449) WIFI_PROV: DNS request received from 0.0.0.0
+[09:11:14]I (12449) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1
+[09:11:14]I (12459) WIFI_PROV: DNS server socket created
+[09:11:14]I (12459) WIFI_PROV: DNS server bound to port 53
+[09:11:16]W (13539) httpd_uri: httpd_uri: URI '/generate_204' not found
+[09:11:16]W (13539) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
+[09:11:18]W (15579) httpd_uri: httpd_uri: URI '/generate_204' not found
+[09:11:18]W (15579) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
+[09:11:20]I (17909) WIFI_PROV: DNS request received from 0.0.0.0
+[09:11:20]I (17909) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1
+[09:11:20]I (17919) WIFI_PROV: DNS server socket created
+[09:11:20]I (17919) WIFI_PROV: DNS server bound to port 53
+[09:11:20]I (17959) WIFI_PROV: DNS request received from 0.0.0.0
+[09:11:20]I (17959) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1
+[09:11:20]I (17969) WIFI_PROV: DNS server socket created
+[09:11:20]I (17969) WIFI_PROV: DNS server bound to port 53
+[09:11:20]I (18449) WIFI_PROV: DNS request received from 0.0.0.0
+[09:11:20]I (18449) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1
+[09:11:20]I (18459) WIFI_PROV: DNS server socket created
+[09:11:20]I (18459) WIFI_PROV: DNS server bound to port 53
+[09:11:21]I (18739) WIFI_PROV: DNS request received from 0.0.0.0
+[09:11:21]I (18739) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1
+[09:11:21]I (18749) WIFI_PROV: DNS server socket created
+[09:11:21]I (18749) WIFI_PROV: DNS server bound to port 53
+[09:11:21]I (18889) WIFI_PROV: DNS request received from 0.0.0.0
+[09:11:21]I (18889) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1
+[09:11:21]I (18899) WIFI_PROV: DNS server socket created
+[09:11:21]I (18899) WIFI_PROV: DNS server bound to port 53
+[09:11:22]W (19639) httpd_uri: httpd_uri: URI '/generate_204' not found
+[09:11:22]W (19639) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
+[09:11:22]I (19919) WIFI_PROV: DNS request received from 0.0.0.0
+[09:11:22]I (19919) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1
+[09:11:22]I (19929) WIFI_PROV: DNS server socket created
+[09:11:22]I (19929) WIFI_PROV: DNS server bound to port 53
+[09:11:23]I (20649) WIFI_PROV: DNS request received from 0.0.0.0
+[09:11:23]I (20649) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1
+[09:11:23]I (20659) WIFI_PROV: DNS server socket created
+[09:11:23]I (20659) WIFI_PROV: DNS server bound to port 53
+[09:11:23]I (20729) WIFI_PROV: DNS request received from 0.0.0.0
+[09:11:23]I (20729) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1
+[09:11:23]I (20739) WIFI_PROV: DNS server socket created
+[09:11:23]I (20739) WIFI_PROV: DNS server bound to port 53
+[09:11:23]I (20769) WIFI_PROV: DNS request received from 0.0.0.0
+[09:11:23]I (20769) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1
+[09:11:23]I (20779) WIFI_PROV: DNS server socket created
+[09:11:23]I (20779) WIFI_PROV: DNS server bound to port 53
+[09:11:23]W (20799) httpd_uri: httpd_uri: URI '/mmtls/7b8f8120' not found
+[09:11:23]W (20799) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
+[09:11:23]I (20959) WIFI_PROV: DNS request received from 0.0.0.0
+[09:11:23]I (20959) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1
+[09:11:23]I (20979) WIFI_PROV: DNS server socket created
+[09:11:23]I (20979) WIFI_PROV: DNS server bound to port 53
+[09:11:23]W (20989) httpd_uri: httpd_uri: URI '/generate_204' not found
+[09:11:23]W (20989) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
+[09:11:24]I (21759) WIFI_PROV: DNS request received from 0.0.0.0
+[09:11:24]I (21759) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1
+[09:11:24]I (21769) WIFI_PROV: DNS server socket created
+[09:11:24]I (21769) WIFI_PROV: DNS server bound to port 53
+[09:11:25]I (22639) WIFI_PROV: DNS request received from 0.0.0.0
+[09:11:25]I (22639) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1
+[09:11:25]I (22649) WIFI_PROV: DNS server socket created
+[09:11:25]I (22649) WIFI_PROV: DNS server bound to port 53
+[09:11:25]I (23289) WIFI_PROV: DNS request received from 0.0.0.0
+[09:11:25]I (23289) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1
+[09:11:25]I (23309) WIFI_PROV: DNS server socket created
+[09:11:25]I (23309) WIFI_PROV: DNS server bound to port 53
+[09:11:26]I (23749) WIFI_PROV: DNS request received from 0.0.0.0
+[09:11:26]I (23749) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1
+[09:11:26]I (23759) WIFI_PROV: DNS server socket created
+[09:11:26]I (23759) WIFI_PROV: DNS server bound to port 53
+[09:11:26]I (23869) WIFI_PROV: DNS request received from 0.0.0.0
+[09:11:26]I (23869) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1
+[09:11:26]I (23879) WIFI_PROV: DNS server socket created
+[09:11:26]I (23879) WIFI_PROV: DNS server bound to port 53
+[09:11:26]I (24289) WIFI_PROV: Received config: {"ssid":"FUCK_cao","password":"fuckyou001","mqtt_uri":"mqtt://10.35.62.83:1883","mqtt_user":"jiafuck","mqtt_pass":"jiaFuck"}
+[09:11:26]I (24299) WIFI_PROV: Saving config - SSID: FUCK_cao, MQTT: mqtt://10.35.62.83:1883
+[09:11:26]I (24309) WIFI_PROV: Config saved, restarting in 1 second...
+[09:11:27]I (25239) WIFI_PROV: DNS request received from 0.0.0.0
+[09:11:27]I (25239) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1
+[09:11:27]I (25249) WIFI_PROV: DNS server socket created
+[09:11:27]I (25249) WIFI_PROV: DNS server bound to port 53
+[09:11:27]I (25309) wifi:station: 26:5d:d2:00:33:9a leave, AID = 1, bss_flags is 33688675, bss:0x40822adc
+[09:11:27]I (25309) wifi:ifidx:1, rssi:-56, nf:-97, phytype(0x4, HT40-LGI), phymode(0x3, 11bgn), max_rate:0, he:0
+[09:11:27]I (25309) wifi:max ampdu length exponent:3(65535 bytes), mmss:5(4 us)
+[09:11:27]I (25319) wifi:new:<1,0>, old:<1,1>, ap:<1,1>, sta:<255,255>, prof:1
+[09:11:27]I (25319) wifi:<ba-del>idx:4, tid:0
+[09:11:27]I (25379) wifi:flush txq
+[09:11:27]I (25379) wifi:stop sw txq
+[09:11:27]I (25379) wifi:lmac stop hw txq
+[09:11:27]ESP-ROM:esp32c6-20220919
+[09:11:27]Build:Sep 19 2022
+[09:11:27]rst:0xc (SW_CPU),boot:0xc (SPI_FAST_FLASH_BOOT)
+[09:11:27]Saved PC:0x4001975a
+[09:11:27]SPIWP:0xee
+[09:11:27]mode:DIO, clock div:2
+[09:11:27]load:0x40875720,len:0x1804
+[09:11:27]load:0x4086c410,len:0xe58
+[09:11:27]load:0x4086e610,len:0x2e24
+[09:11:27]entry 0x4086c41a
+[09:11:27]I (13) boot: ESP-IDF v5.2.1 2nd stage bootloader
+[09:11:27]I (14) boot: compile time May  8 2026 00:58:31
+[09:11:27]I (15) boot: chip revision: v0.2
+[09:11:27]I (16) boot.esp32c6: SPI Speed      : 80MHz
+[09:11:27]I (21) boot.esp32c6: SPI Mode       : DIO
+[09:11:27]I (26) boot.esp32c6: SPI Flash Size : 2MB
+[09:11:27]I (30) boot: Enabling RNG early entropy source...
+[09:11:27]I (36) boot: Partition Table:
+[09:11:27]I (39) boot: ## Label            Usage          Type ST Offset   Length
+[09:11:27]I (47) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+[09:11:27]I (54) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+[09:11:27]I (62) boot:  2 factory          factory app      00 00 00010000 00100000
+[09:11:27]I (69) boot: End of partition table
+[09:11:27]I (73) esp_image: segment 0: paddr=00010020 vaddr=420b8020 size=2b6d0h (177872) map
+[09:11:28]I (154) esp_image: segment 1: paddr=0003b6f8 vaddr=40800000 size=04920h ( 18720) load
+[09:11:28]I (165) esp_image: segment 2: paddr=00040020 vaddr=42000020 size=b4c14h (740372) map
+[09:11:28]I (468) esp_image: segment 3: paddr=000f4c3c vaddr=40804920 size=1121ch ( 70172) load
+[09:11:28]I (502) esp_image: segment 4: paddr=00105e60 vaddr=40815b40 size=0362ch ( 13868) load
+[09:11:28]I (520) boot: Loaded app from partition at offset 0x10000
+[09:11:28]I (521) boot: Disabling RNG early entropy source...
+[09:11:28]I (532) cpu_start: Unicore app
+[09:11:28]W (542) clk: esp_perip_clk_init() has not been implemented yet
+[09:11:28]I (548) cpu_start: Pro cpu start user code
+[09:11:28]I (549) cpu_start: cpu freq: 160000000 Hz
+[09:11:28]I (549) cpu_start: Application information:
+[09:11:28]I (552) cpu_start: Project name:     high_frequency
+[09:11:28]I (557) cpu_start: App version:      8fe593c
+[09:11:28]I (562) cpu_start: Compile time:     May  8 2026 00:58:25
+[09:11:28]I (568) cpu_start: ELF file SHA256:  23deaa0a3...
+[09:11:28]I (574) cpu_start: ESP-IDF:          v5.2.1
+[09:11:28]I (578) cpu_start: Min chip rev:     v0.0
+[09:11:28]I (583) cpu_start: Max chip rev:     v0.99 
+[09:11:28]I (588) cpu_start: Chip rev:         v0.2
+[09:11:28]I (593) heap_init: Initializing. RAM available for dynamic allocation:
+[09:11:28]I (600) heap_init: At 40820860 len 0005BDB0 (367 KiB): RAM
+[09:11:28]I (606) heap_init: At 4087C610 len 00002F54 (11 KiB): RAM
+[09:11:28]I (612) heap_init: At 50000000 len 00003FE8 (15 KiB): RTCRAM
+[09:11:28]I (619) spi_flash: detected chip: generic
+[09:11:28]I (623) spi_flash: flash io: dio
+[09:11:28]W (627) spi_flash: Detected size(16384k) larger than the size in the binary image header(2048k). Using the size in the binary image header.
+[09:11:28]I (641) sleep: Configure to isolate all GPIO pins in sleep state
+[09:11:28]I (647) sleep: Enable automatic switching of GPIO sleep configuration
+[09:11:28]I (654) coexist: coex firmware version: 77cd7f8
+[09:11:28]I (659) coexist: coexist rom version 5b8dcfa
+[09:11:28]I (665) main_task: Started on CPU0
+[09:11:28]I (665) main_task: Calling app_main()
+[09:11:28]I (665) MAIN: ========================================
+[09:11:28]I (675) MAIN: ESP32-C6 System Starting...
+[09:11:28]I (675) MAIN: Console: UART0 (RX=GPIO8, TX=GPIO9)
+[09:11:28]I (695) MAIN: NVS initialized successfully
+[09:11:28]I (695) NVS: Params loaded: freq=200000, duty=128, enable=0
+[09:11:28]I (695) MAIN: Parameters loaded from NVS
+[09:11:28]I (705) gpio: GPIO[4]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 
+[09:11:28]I (715) gpio: GPIO[9]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 
+[09:11:28]I (725) MAIN: GPIO initialized: LED=4, KEY=9
+[09:11:28]I (725) MAIN: PWM initialized: freq=200000, duty=128, switch=0
+[09:11:28]I (735) MAIN: Key initialized
+[09:11:28]I (735) MAIN: WiFi credentials found, connecting...
+[09:11:28]I (745) WIFI_PROV: Initializing WiFi in STA mode
+[09:11:28]I (745) pp: pp rom version: 5b8dcfa
+[09:11:28]I (755) net80211: net80211 rom version: 5b8dcfa
+[09:11:28]I (765) wifi:wifi driver task: 40829740, prio:23, stack:6656, core=0
+[09:11:28]I (765) wifi:wifi firmware version: a9f5b59
+[09:11:28]I (765) wifi:wifi certification version: v7.0
+[09:11:28]I (775) wifi:config NVS flash: enabled
+[09:11:28]I (775) wifi:config nano formating: disabled
+[09:11:28]I (775) wifi:mac_version:HAL_MAC_ESP32AX_761,ut_version:N
+[09:11:28]I (785) wifi:Init data frame dynamic rx buffer num: 32
+[09:11:28]I (785) wifi:Init static rx mgmt buffer num: 5
+[09:11:28]I (795) wifi:Init management short buffer num: 32
+[09:11:28]I (795) wifi:Init dynamic tx buffer num: 32
+[09:11:28]I (805) wifi:Init static tx FG buffer num: 2
+[09:11:28]I (805) wifi:Init static rx buffer size: 1700
+[09:11:28]I (805) wifi:Init static rx buffer num: 10
+[09:11:28]I (815) wifi:Init dynamic rx buffer num: 32
+[09:11:28]I (815) wifi_init: rx ba win: 6
+[09:11:28]I (825) wifi_init: tcpip mbox: 32
+[09:11:28]I (825) wifi_init: udp mbox: 6
+[09:11:28]I (825) wifi_init: tcp mbox: 6
+[09:11:28]I (835) wifi_init: tcp tx win: 5760
+[09:11:28]I (835) wifi_init: tcp rx win: 5760
+[09:11:28]I (835) wifi_init: tcp mss: 1440
+[09:11:28]I (845) wifi_init: WiFi IRAM OP enabled
+[09:11:28]I (845) wifi_init: WiFi RX IRAM OP enabled
+[09:11:28]I (875) phy_init: phy_version 250,e14681b,Jan 24 2024,17:43:11
+[09:11:28]W (955) wifi:(bf)761:0x600a7cac:0x01b4b4b0
+[09:11:28]W (955) wifi:(agc)0x600a7128:0xd2176800, min.avgNF:0xce->0xd2(dB), RCalCount:0x176, min.RRssi:0x800(-128.00)
+[09:11:28]W (955) wifi:(TB)WDEV_PWR_TB_MCS0:19
+[09:11:28]W (965) wifi:(TB)WDEV_PWR_TB_MCS1:19
+[09:11:28]W (965) wifi:(TB)WDEV_PWR_TB_MCS2:19
+[09:11:28]W (965) wifi:(TB)WDEV_PWR_TB_MCS3:19
+[09:11:28]W (975) wifi:(TB)WDEV_PWR_TB_MCS4:19
+[09:11:28]W (975) wifi:(TB)WDEV_PWR_TB_MCS5:19
+[09:11:28]W (975) wifi:(TB)WDEV_PWR_TB_MCS6:18
+[09:11:28]W (985) wifi:(TB)WDEV_PWR_TB_MCS7:18
+[09:11:28]W (985) wifi:(TB)WDEV_PWR_TB_MCS8:17
+[09:11:28]W (985) wifi:(TB)WDEV_PWR_TB_MCS9:15
+[09:11:28]W (995) wifi:(TB)WDEV_PWR_TB_MCS10:15
+[09:11:28]W (995) wifi:(TB)WDEV_PWR_TB_MCS11:15
+[09:11:28]I (995) wifi:11ax coex: WDEVAX_PTI0(0x55777555), WDEVAX_PTI1(0x00003377).
+[09:11:28]
+[09:11:28]I (1005) wifi:mode : sta (58:8c:81:37:9d:a8)
+[09:11:28]I (1005) wifi:enable tsf
+[09:11:28]I (1015) WIFI_PROV: WiFi STA started
+[09:11:28]I (1015) WIFI_PROV: WiFi connecting to FUCK_cao...
+[09:11:28]I (1025) MAIN: WiFi started
+[09:11:28]I (1025) MAIN: Waiting for WiFi connection...
+[09:11:30]I (2225) wifi:new:<11,0>, old:<1,0>, ap:<255,255>, sta:<11,0>, prof:1
+[09:11:30]I (2225) wifi:(connect)dot11_authmode:0x3, pairwise_cipher:0x3, group_cipher:0x3
+[09:11:30]I (2585) wifi:state: init -> auth (b0)
+[09:11:30]I (2585) wifi:state: auth -> assoc (0)
+[09:11:30]I (2585) wifi:state: assoc -> run (10)
+[09:11:30]I (2585) wifi:(trc)phytype:CBW20-SGI, snr:58, maxRate:144, highestRateIdx:0
+[09:11:30]I (2585) wifi:(trc)rate(S-MCS7, schedIdx:0), ampdu(rate:S-MCS7, schedIdx(0, stop:8)), snr:58, ampduState:wait operational
+[09:11:30]I (2605) wifi:ifidx:0, rssi:-39, nf:-97, phytype(0x3, CBW20-SGI), phymode(0x3, 11bgn), max_rate:1440, he:0
+[09:11:30]I (2605) wifi:max ampdu length exponent:3(65535 bytes), mmss:5(4 us)
+[09:11:30]I (2985) wifi:(extcap)mbssid:0, enhanced_mbssid_advertise:0, complete_nontxbssid_profiles:0, twt_responder: 0
+[09:11:30]I (2995) wifi:connected with FUCK_cao, aid = 4, channel 11, BW20, bssid = 64:09:80:0e:d5:a7
+[09:11:30]I (2995) wifi:cipher(pairwise:0x3, group:0x3), pmf:0, security:WPA2-PSK, phy:11bgn, rssi:-39
+[09:11:30]I (3015) wifi:pm start, type: 1, itwt_start:0
+[09:11:30]
+[09:11:30]I (3015) wifi:pm start, type:1, aid:0x4, trans-BSSID:64:09:80:0e:d5:a7, BSSID[5]:0xa7, mbssid(max-indicator:0, index:0), he:0
+[09:11:30]I (3025) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us
+[09:11:30]I (3025) wifi:set rx beacon pti, rx_bcn_pti: 10, bcn_timeout: 25000, mt_pti: 10, mt_time: 10000
+[09:11:30]I (3035) wifi:[ADDBA]TX addba request, tid:0, dialogtoken:1, bufsize:64, A-MSDU:0(not supported), policy:1(IMR), ssn:0(0x0)
+[09:11:30]I (3045) wifi:[ADDBA]TX addba request, tid:7, dialogtoken:2, bufsize:64, A-MSDU:0(not supported), policy:1(IMR), ssn:0(0x20)
+[09:11:30]I (3055) wifi:[ADDBA]TX addba request, tid:5, dialogtoken:3, bufsize:64, A-MSDU:0(not supported), policy:1(IMR), ssn:0(0x0)
+[09:11:30]W (3065) wifi:<ba-add>idx:0, ifx:0, tid:0, TAHI:0x100a7d5, TALO:0xe800964, (ssn:2, win:64, cur_ssn:2), CONF:0xc0000005
+[09:11:30]I (3075) wifi:AP's beacon interval = 102400 us, DTIM period = 1
+[09:11:30]I (3085) wifi:[ADDBA]RX addba response, status:0, tid:0/tb:1(0xa1), bufsize:64, batimeout:0, txa_wnd:64
+[09:11:30]I (3095) wifi:[ADDBA]RX addba response, status:0, tid:7/tb:1(0xa1), bufsize:64, batimeout:0, txa_wnd:64
+[09:11:30]I (3105) wifi:[ADDBA]RX addba response, status:0, tid:5/tb:1(0xa1), bufsize:64, batimeout:0, txa_wnd:64
+[09:11:30]I (3115) WIFI_PROV: WiFi connected to AP
+[09:11:31]I (4115) esp_netif_handlers: sta ip: 192.168.123.179, mask: 255.255.255.0, gw: 192.168.123.1
+[09:11:31]I (4115) WIFI_PROV: Got IP: 192.168.123.179
+[09:11:31]I (4115) MAIN: WiFi connected successfully!
+[09:11:31]I (4115) MQTT: Initializing MQTT client...
+[09:11:31]I (4125) MQTT: Broker: mqtt://10.35.62.83:1883
+[09:11:31]I (4135) MQTT: MQTT client started
+[09:11:31]I (4135) MAIN: LED status task started
+[09:11:31]I (4135) MAIN: Status publish task started
+[09:11:32]I (4135) MAIN: ========================================
+[09:11:32]I (4145) MAIN: All tasks started. System running.
+[09:11:32]I (4155) MQTT: MQTT connected
+[09:11:32]I (4165) MQTT: MQTT Discovery configs sent
+[09:11:32]I (4185) MAIN: WiFi status: Connected
+[09:11:32]I (4185) MAIN: MQTT status: Connected
+[09:11:32]I (4185) MAIN: IP: 192.168.123.179
+[09:11:32]I (4185) main_task: Returned from app_main()
