@@ -7,6 +7,10 @@
 #include "esp_mac.h"
 #include "nvs_param.h"
 #include "cJSON.h"
+#include "lwip/err.h"
+#include "lwip/sockets.h"
+#include "lwip/sys.h"
+#include "lwip/netdb.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -15,6 +19,9 @@ static httpd_handle_t prov_server = NULL;
 static bool prov_running = false;
 static bool wifi_connected = false;
 static bool force_reprovision = false;
+
+// DNS 服务器任务句柄
+static TaskHandle_t dns_task_handle = NULL;
 
 // 获取MAC地址后缀
 static void get_mac_suffix(char *buf, size_t len)
@@ -299,6 +306,35 @@ void wifi_prov_start(void)
 
     ESP_LOGI(TAG, "SoftAP started: SSID=%s (no password)", ap_ssid);
 
+    // 配置DHCP服务器，设置DNS为ESP32自己的IP
+    esp_netif_t* ap_netif = esp_netif_get_handle_from_ifkey("WIFI_AP_DEF");
+    if (ap_netif) {
+        // 停止DHCP服务器
+        esp_netif_dhcps_stop(ap_netif);
+        
+        // 配置IP地址
+        esp_netif_ip_info_t ip_info;
+        IP4_ADDR(&ip_info.ip, 192, 168, 4, 1);
+        IP4_ADDR(&ip_info.gw, 192, 168, 4, 1);
+        IP4_ADDR(&ip_info.netmask, 255, 255, 255, 0);
+        esp_netif_set_ip_info(ap_netif, &ip_info);
+        
+        // 配置DHCP选项：DNS服务器指向自己
+        uint8_t dhcp_option_6[4] = {192, 168, 4, 1}; // DNS服务器地址
+        esp_netif_dhcps_option(ap_netif, ESP_NETIF_OP_SET, ESP_NETIF_DOMAIN_NAME_SERVER, dhcp_option_6, sizeof(dhcp_option_6));
+        
+        // 重新启动DHCP服务器
+        esp_netif_dhcps_start(ap_netif);
+        
+        ESP_LOGI(TAG, "DHCP server configured with DNS: 192.168.4.1");
+    }
+
+    // 启动DNS劫持服务器
+    if (dns_task_handle == NULL) {
+        xTaskCreate(dns_server_task, "dns_server", 4096, NULL, 5, &dns_task_handle);
+        ESP_LOGI(TAG, "DNS hijacking server started");
+    }
+
     // 启动HTTP服务器
     httpd_config_t config = HTTPD_DEFAULT_CONFIG();
     config.server_port = 80;
@@ -336,5 +372,107 @@ void wifi_prov_start(void)
         prov_running = true;
     } else {
         ESP_LOGE(TAG, "Failed to start HTTP server");
+    }
+}
+
+// DNS 服务器任务 - 劫持所有DNS请求并返回ESP32的IP
+static void dns_server_task(void *pvParameters)
+{
+    char rx_buffer[128];
+    char addr_str[128];
+    int addr_family;
+    int ip_protocol;
+
+    while (1) {
+        struct sockaddr_in dest_addr;
+        dest_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+        dest_addr.sin_family = AF_INET;
+        dest_addr.sin_port = htons(53);
+        addr_family = AF_INET;
+        ip_protocol = IPPROTO_IP;
+        inet_ntoa_r(dest_addr.sin_addr, addr_str, sizeof(addr_str) - 1);
+
+        int sock = socket(addr_family, SOCK_DGRAM, ip_protocol);
+        if (sock < 0) {
+            ESP_LOGE(TAG, "Unable to create socket: errno %d", errno);
+            break;
+        }
+        ESP_LOGI(TAG, "DNS server socket created");
+
+        // 设置超时
+        struct timeval timeout;
+        timeout.tv_sec = 10;
+        timeout.tv_usec = 0;
+        setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+
+        int err = bind(sock, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
+        if (err < 0) {
+            ESP_LOGE(TAG, "Socket unable to bind: errno %d", errno);
+        }
+        ESP_LOGI(TAG, "DNS server bound to port 53");
+
+        // 接收DNS请求
+        struct sockaddr_in6 source_addr;
+        socklen_t socklen = sizeof(source_addr);
+        int len = recvfrom(sock, rx_buffer, sizeof(rx_buffer) - 1, 0, (struct sockaddr *)&source_addr, &socklen);
+
+        if (len > 0) {
+            ESP_LOGI(TAG, "DNS request received from %s", addr_str);
+            
+            // 构造DNS响应 - 将所有域名解析为 192.168.4.1
+            // DNS响应头（保持相同的Transaction ID和Flags）
+            char response[256];
+            memcpy(response, rx_buffer, len); // 复制请求头
+            
+            // 设置QR位为1（响应）
+            response[2] |= 0x80;
+            // 设置RA位为1
+            response[3] |= 0x80;
+            // 设置答案数量为1
+            response[6] = 0x00;
+            response[7] = 0x01;
+            
+            // 添加答案记录
+            int resp_len = len;
+            
+            // 添加指向问题的指针（使用压缩指针）
+            response[resp_len++] = 0xC0;  // 指针标记
+            response[resp_len++] = 0x0C;  // 指向第12字节（问题部分）
+            
+            // 类型：A记录 (1)
+            response[resp_len++] = 0x00;
+            response[resp_len++] = 0x01;
+            
+            // 类：IN (1)
+            response[resp_len++] = 0x00;
+            response[resp_len++] = 0x01;
+            
+            // TTL: 60秒
+            response[resp_len++] = 0x00;
+            response[resp_len++] = 0x00;
+            response[resp_len++] = 0x00;
+            response[resp_len++] = 0x3C;
+            
+            // 数据长度：4字节（IPv4地址）
+            response[resp_len++] = 0x00;
+            response[resp_len++] = 0x04;
+            
+            // IP地址：192.168.4.1
+            response[resp_len++] = 192;
+            response[resp_len++] = 168;
+            response[resp_len++] = 4;
+            response[resp_len++] = 1;
+            
+            // 发送响应
+            sendto(sock, response, resp_len, 0, (struct sockaddr *)&source_addr, socklen);
+            ESP_LOGI(TAG, "DNS response sent: all domains -> 192.168.4.1");
+        }
+
+        closesocket(sock);
+        vTaskDelay(10 / portTICK_PERIOD_MS); // 短暂延迟后继续监听
+    }
+
+    if (dns_task_handle) {
+        vTaskDelete(NULL);
     }
 }
