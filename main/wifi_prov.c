@@ -412,50 +412,56 @@ void wifi_prov_start(void)
 // DNS 服务器任务 - 劫持所有DNS请求并返回ESP32的IP
 static void dns_server_task(void *pvParameters)
 {
-    char rx_buffer[128];
-    char addr_str[128];
-    int addr_family;
-    int ip_protocol;
+    char rx_buffer[512];  // 增大缓冲区以支持更长的DNS查询
+    struct sockaddr_in6 source_addr;
+    socklen_t socklen = sizeof(source_addr);
 
+    // 创建持久化的UDP socket
+    struct sockaddr_in dest_addr;
+    dest_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    dest_addr.sin_family = AF_INET;
+    dest_addr.sin_port = htons(53);
+
+    int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
+    if (sock < 0) {
+        ESP_LOGE(TAG, "Unable to create DNS socket: errno %d", errno);
+        vTaskDelete(NULL);
+        return;
+    }
+    ESP_LOGI(TAG, "DNS server socket created");
+
+    // 允许地址重用
+    int opt = 1;
+    setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+
+    int err = bind(sock, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
+    if (err < 0) {
+        ESP_LOGE(TAG, "Socket unable to bind: errno %d", errno);
+        closesocket(sock);
+        vTaskDelete(NULL);
+        return;
+    }
+    ESP_LOGI(TAG, "DNS server bound to port 53");
+
+    // 设置超时
+    struct timeval timeout;
+    timeout.tv_sec = 10;
+    timeout.tv_usec = 0;
+    setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+
+    // 主循环 - 持续处理DNS请求
     while (1) {
-        struct sockaddr_in dest_addr;
-        dest_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-        dest_addr.sin_family = AF_INET;
-        dest_addr.sin_port = htons(53);
-        addr_family = AF_INET;
-        ip_protocol = IPPROTO_IP;
-        inet_ntoa_r(dest_addr.sin_addr, addr_str, sizeof(addr_str) - 1);
-
-        int sock = socket(addr_family, SOCK_DGRAM, ip_protocol);
-        if (sock < 0) {
-            ESP_LOGE(TAG, "Unable to create socket: errno %d", errno);
-            break;
-        }
-        ESP_LOGI(TAG, "DNS server socket created");
-
-        // 设置超时
-        struct timeval timeout;
-        timeout.tv_sec = 10;
-        timeout.tv_usec = 0;
-        setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
-
-        int err = bind(sock, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
-        if (err < 0) {
-            ESP_LOGE(TAG, "Socket unable to bind: errno %d", errno);
-        }
-        ESP_LOGI(TAG, "DNS server bound to port 53");
-
         // 接收DNS请求
-        struct sockaddr_in6 source_addr;
-        socklen_t socklen = sizeof(source_addr);
         int len = recvfrom(sock, rx_buffer, sizeof(rx_buffer) - 1, 0, (struct sockaddr *)&source_addr, &socklen);
 
         if (len > 0) {
-            ESP_LOGI(TAG, "DNS request received from %s", addr_str);
+            // 获取客户端IP地址用于日志
+            char client_ip[INET_ADDRSTRLEN];
+            inet_ntop(AF_INET, &((struct sockaddr_in*)&source_addr)->sin_addr, client_ip, sizeof(client_ip));
+            ESP_LOGI(TAG, "DNS request from %s (len=%d)", client_ip, len);
             
             // 构造DNS响应 - 将所有域名解析为 192.168.4.1
-            // DNS响应头（保持相同的Transaction ID和Flags）
-            char response[256];
+            char response[512];
             memcpy(response, rx_buffer, len); // 复制请求头
             
             // 设置QR位为1（响应）
@@ -498,15 +504,22 @@ static void dns_server_task(void *pvParameters)
             response[resp_len++] = 1;
             
             // 发送响应
-            sendto(sock, response, resp_len, 0, (struct sockaddr *)&source_addr, socklen);
-            ESP_LOGI(TAG, "DNS response sent: all domains -> 192.168.4.1");
+            int sent = sendto(sock, response, resp_len, 0, (struct sockaddr *)&source_addr, socklen);
+            if (sent > 0) {
+                ESP_LOGI(TAG, "DNS response sent: all domains -> 192.168.4.1 (%d bytes)", sent);
+            } else {
+                ESP_LOGW(TAG, "Failed to send DNS response: errno %d", errno);
+            }
+        } else if (len == 0) {
+            ESP_LOGW(TAG, "DNS connection closed");
+        } else {
+            // 超时或其他错误，继续循环
+            ESP_LOGD(TAG, "DNS recv timeout or error: errno %d", errno);
         }
-
-        closesocket(sock);
-        vTaskDelay(10 / portTICK_PERIOD_MS); // 短暂延迟后继续监听
     }
 
-    if (dns_task_handle) {
-        vTaskDelete(NULL);
-    }
+    // 正常情况下不会到达这里
+    closesocket(sock);
+    ESP_LOGW(TAG, "DNS server task exiting");
+    vTaskDelete(NULL);
 }
