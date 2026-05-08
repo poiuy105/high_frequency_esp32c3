@@ -372,16 +372,10 @@ void wifi_prov_start(void)
         };
         httpd_register_uri_handler(prov_server, &prov_uri);
 
-        // 注册 Captive Portal 检测 URL - Android/iOS/Windows
+        // 注册 Captive Portal 检测 URL - 只保留最关键的两个
         const char* captive_urls[] = {
-            "/generate_204",
-            "/gen_204",
-            "/library/test/success.html",
-            "/hotspot-detect.html",
-            "/connecttest.txt",
-            "/redirect",
-            "/success.txt",
-            "/ncsi.txt"
+            "/generate_204",    // Android
+            "/gen_204"          // Android alternative
         };
         
         for (int i = 0; i < sizeof(captive_urls)/sizeof(captive_urls[0]); i++) {
@@ -391,11 +385,13 @@ void wifi_prov_start(void)
                 .handler = captive_portal_handler,
                 .user_ctx = NULL
             };
-            httpd_register_uri_handler(prov_server, &captive_uri);
+            esp_err_t ret = httpd_register_uri_handler(prov_server, &captive_uri);
+            if (ret == ESP_OK) {
+                ESP_LOGI(TAG, "Registered captive URL: %s", captive_urls[i]);
+            } else {
+                ESP_LOGW(TAG, "Failed to register %s (err=%d)", captive_urls[i], ret);
+            }
         }
-        
-        ESP_LOGI(TAG, "Registered %d captive portal detection URLs", 
-                 sizeof(captive_urls)/sizeof(captive_urls[0]));
 
         // 注册通配符处理 - 用于其他所有请求重定向到主页
         httpd_uri_t catch_all_uri = {
