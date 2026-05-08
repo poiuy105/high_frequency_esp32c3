@@ -176,7 +176,49 @@ static esp_err_t captive_portal_handler(httpd_req_t *req)
     // Android/Captive Portal 检测需要返回 204 No Content
     httpd_resp_set_status(req, "204 No Content");
     httpd_resp_send(req, NULL, 0);
-    ESP_LOGI(TAG, "Captive portal detection handled (204 response)");
+    ESP_LOGI(TAG, "Captive portal detection handled (204 response) for %s", req->uri);
+    return ESP_OK;
+}
+
+// 处理所有HTTP方法的通配符handler
+static esp_err_t catch_all_handler(httpd_req_t *req)
+{
+    // 记录请求信息
+    ESP_LOGI(TAG, "Catch-all: method=%d, uri=%s", req->method, req->uri);
+
+    // 对于Android/iOS的captive portal检测URL，返回204
+    const char* detection_urls[] = {
+        "/generate_204",
+        "/gen_204",
+        "/favicon.ico",
+        "/hotspot-detect.html",
+        "/connecttest.txt",
+        "/success.txt",
+        NULL
+    };
+
+    // 检查是否是检测URL
+    for (int i = 0; detection_urls[i] != NULL; i++) {
+        if (strcmp(req->uri, detection_urls[i]) == 0) {
+            httpd_resp_set_status(req, "204 No Content");
+            httpd_resp_send(req, NULL, 0);
+            ESP_LOGI(TAG, "Detection URL handled with 204: %s", req->uri);
+            return ESP_OK;
+        }
+    }
+
+    // 对于其他请求，重定向到主页（只对GET和HEAD方法）
+    if (req->method == HTTP_GET || req->method == HTTP_HEAD) {
+        httpd_resp_set_status(req, "302 Found");
+        httpd_resp_set_hdr(req, "Location", "/");
+        httpd_resp_send(req, NULL, 0);
+        ESP_LOGI(TAG, "Redirecting to / for %s", req->uri);
+    } else {
+        // 对于POST/PUT等其他方法，直接返回204
+        httpd_resp_set_status(req, "204 No Content");
+        httpd_resp_send(req, NULL, 0);
+        ESP_LOGI(TAG, "Non-GET method %d for %s, returning 204", req->method, req->uri);
+    }
     return ESP_OK;
 }
 
@@ -384,13 +426,22 @@ void wifi_prov_start(void)
         };
         httpd_register_uri_handler(prov_server, &prov_uri);
 
-        // 注册 Captive Portal 检测 URL - 只保留最关键的两个
+        // 注册 Captive Portal 检测 URL - 添加Android/iOS的多个检测URL
+        // 这些URL需要返回204才能触发captive portal提示
         const char* captive_urls[] = {
-            "/generate_204",    // Android
-            "/gen_204"          // Android alternative
+            "/generate_204",       // Android (主要)
+            "/gen_204",            // Android (备用)
+            "/favicon.ico",        // Android/iOS检测
+            "/hotspot-detect.html",// iOS
+            "/connecttest.txt",    // Windows
+            "/success.txt",        // 某些Android设备
+            "/ncsi.txt",           // Windows Network Connectivity Status Indicator
+            "/test.txt",           // 通用检测
+            "/index.html",         // 某些设备
+            NULL
         };
-        
-        for (int i = 0; i < sizeof(captive_urls)/sizeof(captive_urls[0]); i++) {
+
+        for (int i = 0; captive_urls[i] != NULL; i++) {
             httpd_uri_t captive_uri = {
                 .uri = captive_urls[i],
                 .method = HTTP_GET,
@@ -406,18 +457,25 @@ void wifi_prov_start(void)
         }
 
         // 注册通配符处理 - 用于其他所有请求重定向到主页（Captive Portal关键）
-        // ESP-IDF 使用 /* 作为通配符，需要启用 httpd_uri_match_wildcard
-        httpd_uri_t catch_all_uri = {
-            .uri = "/*",
-            .method = HTTP_GET,
-            .handler = redirect_to_captive_handler,  // 使用重定向而不是直接返回
-            .user_ctx = NULL
+        // 支持所有HTTP方法，以处理Android/iOS的各种检测请求
+        const httpd_method_t all_methods[] = {
+            HTTP_GET, HTTP_POST, HTTP_PUT, HTTP_DELETE,
+            HTTP_PATCH, HTTP_HEAD, HTTP_OPTIONS, HTTP_COPY
         };
-        esp_err_t ret = httpd_register_uri_handler(prov_server, &catch_all_uri);
-        if (ret == ESP_OK) {
-            ESP_LOGI(TAG, "Registered wildcard redirect handler for /*");
-        } else {
-            ESP_LOGW(TAG, "Failed to register wildcard handler (err=%d)", ret);
+
+        for (int i = 0; i < sizeof(all_methods)/sizeof(all_methods[0]); i++) {
+            httpd_uri_t catch_all_uri = {
+                .uri = "/*",
+                .method = all_methods[i],
+                .handler = catch_all_handler,
+                .user_ctx = NULL
+            };
+            esp_err_t ret = httpd_register_uri_handler(prov_server, &catch_all_uri);
+            if (ret == ESP_OK) {
+                ESP_LOGI(TAG, "Registered wildcard handler for method %d", all_methods[i]);
+            } else {
+                ESP_LOGW(TAG, "Failed to register wildcard handler for method %d (err=%d)", all_methods[i], ret);
+            }
         }
 
         ESP_LOGI(TAG, "HTTP server started, connect to http://192.168.4.1");
