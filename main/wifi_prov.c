@@ -406,6 +406,7 @@ void wifi_prov_start(void)
     config.server_port = 80;
     config.lru_purge_enable = true;
     config.uri_match_fn = httpd_uri_match_wildcard;  // 启用通配符匹配
+    config.max_uri_handlers = 32;  // 增加URI处理器槽位，解决Android配网弹窗问题
 
     if (httpd_start(&prov_server, &config) == ESP_OK) {
         // 注册主页处理
@@ -426,19 +427,14 @@ void wifi_prov_start(void)
         };
         httpd_register_uri_handler(prov_server, &prov_uri);
 
-        // 注册 Captive Portal 检测 URL - 添加Android/iOS的多个检测URL
-        // 这些URL需要返回204才能触发captive portal提示
+        // 注册 Captive Portal 检测 URL - 精简版，只保留必要的检测URL
         const char* captive_urls[] = {
             "/generate_204",       // Android (主要)
             "/gen_204",            // Android (备用)
-            "/favicon.ico",        // Android/iOS检测
-            "/hotspot-detect.html",// iOS
+            "/hotspot-detect.html",// iOS必须
             "/connecttest.txt",    // Windows
-            "/success.txt",        // 某些Android设备
-            "/ncsi.txt",           // Windows Network Connectivity Status Indicator
-            "/test.txt",           // 通用检测
-            "/index.html",         // 某些设备
-            NULL
+            "/ncsi.txt",           // Windows NCSI
+            NULL                   // 到此为止，不再添加更多
         };
 
         for (int i = 0; captive_urls[i] != NULL; i++) {
@@ -456,12 +452,8 @@ void wifi_prov_start(void)
             }
         }
 
-        // 注册通配符处理 - 用于其他所有请求重定向到主页（Captive Portal关键）
-        // 支持所有HTTP方法，以处理Android/iOS的各种检测请求
-        const httpd_method_t all_methods[] = {
-            HTTP_GET, HTTP_POST, HTTP_PUT, HTTP_DELETE,
-            HTTP_PATCH, HTTP_HEAD, HTTP_OPTIONS, HTTP_COPY
-        };
+        // 注册通配符处理 - 只保留GET和HEAD方法，避免槽位耗尽
+        const httpd_method_t all_methods[] = { HTTP_GET, HTTP_HEAD };
 
         for (int i = 0; i < sizeof(all_methods)/sizeof(all_methods[0]); i++) {
             httpd_uri_t catch_all_uri = {
