@@ -315,37 +315,53 @@ static void mqtt_event_handler(void *arg, esp_event_base_t base, int32_t id, voi
 
         case MQTT_EVENT_DATA:
         {
-            ESP_LOGI(TAG, "MQTT data: %s = %s", evt->topic, evt->data);
+            ESP_LOGI(TAG, "MQTT data received: topic=%s, data=%.*s", evt->topic, evt->data_len, evt->data);
 
             // 开关命令
             if (strcmp(evt->topic, cmd_switch_topic) == 0) {
+                ESP_LOGI(TAG, "Switch command received: %.*s", evt->data_len, evt->data);
                 bool en = (strncmp(evt->data, "ON", 2) == 0);
+                ESP_LOGI(TAG, "Setting PWM enable to: %d", en);
                 ledc_set_pwm_enable(en);
                 nvs_save_all_param();
                 esp_mqtt_client_publish(mqtt_client, state_switch_topic,
                                        en ? "ON" : "OFF", 0, 1, 0);
+                ESP_LOGI(TAG, "Switch state published");
             }
             // 频率命令
             else if (strcmp(evt->topic, cmd_freq_topic) == 0) {
+                ESP_LOGI(TAG, "Frequency command received: %.*s", evt->data_len, evt->data);
                 uint32_t freq = atoi(evt->data);
+                ESP_LOGI(TAG, "Parsed frequency: %lu", (unsigned long)freq);
                 if (freq >= 10000 && freq <= 300000) {
                     ledc_set_pwm_freq(freq);
                     nvs_save_all_param();
                     char freq_buf[32];
                     snprintf(freq_buf, sizeof(freq_buf), "%lu", (unsigned long)freq);
                     esp_mqtt_client_publish(mqtt_client, state_freq_topic, freq_buf, 0, 1, 0);
+                    ESP_LOGI(TAG, "Frequency state published: %s", freq_buf);
+                } else {
+                    ESP_LOGW(TAG, "Frequency out of range: %lu", (unsigned long)freq);
                 }
             }
             // 占空比命令
             else if (strcmp(evt->topic, cmd_duty_topic) == 0) {
+                ESP_LOGI(TAG, "Duty command received: %.*s", evt->data_len, evt->data);
                 uint8_t duty = atoi(evt->data);
+                ESP_LOGI(TAG, "Parsed duty: %d", duty);
                 if (duty <= 250) {
                     ledc_set_pwm_duty(duty);
                     nvs_save_all_param();
                     char duty_buf[32];
                     snprintf(duty_buf, sizeof(duty_buf), "%d", duty);
                     esp_mqtt_client_publish(mqtt_client, state_duty_topic, duty_buf, 0, 1, 0);
+                    ESP_LOGI(TAG, "Duty state published: %s", duty_buf);
+                } else {
+                    ESP_LOGW(TAG, "Duty out of range: %d", duty);
                 }
+            }
+            else {
+                ESP_LOGW(TAG, "Unknown topic: %s", evt->topic);
             }
             break;
         }
