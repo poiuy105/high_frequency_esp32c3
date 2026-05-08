@@ -315,10 +315,25 @@ static void mqtt_event_handler(void *arg, esp_event_base_t base, int32_t id, voi
 
         case MQTT_EVENT_DATA:
         {
-            ESP_LOGI(TAG, "MQTT data received: topic=%s, data=%.*s", evt->topic, evt->data_len, evt->data);
+            ESP_LOGI(TAG, "MQTT event data_len: %d", evt->data_len);
+            ESP_LOGI(TAG, "MQTT topic length: %d", evt->topic_len);
+            ESP_LOGI(TAG, "MQTT topic (raw): %.*s", evt->topic_len, evt->topic);
+            ESP_LOGI(TAG, "MQTT data (raw): %.*s", evt->data_len, evt->data);
+            
+            // 确保topic字符串正确终止
+            char topic_buf[128];
+            if (evt->topic_len < sizeof(topic_buf)) {
+                memcpy(topic_buf, evt->topic, evt->topic_len);
+                topic_buf[evt->topic_len] = '\0';
+            } else {
+                ESP_LOGE(TAG, "Topic too long");
+                break;
+            }
+            
+            ESP_LOGI(TAG, "MQTT data received: topic=%s, data=%.*s", topic_buf, evt->data_len, evt->data);
 
             // 开关命令
-            if (strcmp(evt->topic, cmd_switch_topic) == 0) {
+            if (strcmp(topic_buf, cmd_switch_topic) == 0) {
                 ESP_LOGI(TAG, "Switch command received: %.*s", evt->data_len, evt->data);
                 bool en = (strncmp(evt->data, "ON", 2) == 0);
                 ESP_LOGI(TAG, "Setting PWM enable to: %d", en);
@@ -329,7 +344,7 @@ static void mqtt_event_handler(void *arg, esp_event_base_t base, int32_t id, voi
                 ESP_LOGI(TAG, "Switch state published");
             }
             // 频率命令
-            else if (strcmp(evt->topic, cmd_freq_topic) == 0) {
+            else if (strcmp(topic_buf, cmd_freq_topic) == 0) {
                 ESP_LOGI(TAG, "Frequency command received: %.*s", evt->data_len, evt->data);
                 uint32_t freq = atoi(evt->data);
                 ESP_LOGI(TAG, "Parsed frequency: %lu", (unsigned long)freq);
@@ -345,7 +360,7 @@ static void mqtt_event_handler(void *arg, esp_event_base_t base, int32_t id, voi
                 }
             }
             // 占空比命令
-            else if (strcmp(evt->topic, cmd_duty_topic) == 0) {
+            else if (strcmp(topic_buf, cmd_duty_topic) == 0) {
                 ESP_LOGI(TAG, "Duty command received: %.*s", evt->data_len, evt->data);
                 uint8_t duty = atoi(evt->data);
                 ESP_LOGI(TAG, "Parsed duty: %d", duty);
@@ -361,7 +376,8 @@ static void mqtt_event_handler(void *arg, esp_event_base_t base, int32_t id, voi
                 }
             }
             else {
-                ESP_LOGW(TAG, "Unknown topic: %s", evt->topic);
+                ESP_LOGW(TAG, "Unknown topic: %s (expected switch:%s, freq:%s, duty:%s)", 
+                         topic_buf, cmd_switch_topic, cmd_freq_topic, cmd_duty_topic);
             }
             break;
         }
