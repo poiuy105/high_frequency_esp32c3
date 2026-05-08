@@ -23,6 +23,9 @@ static bool force_reprovision = false;
 // DNS 服务器任务句柄
 static TaskHandle_t dns_task_handle = NULL;
 
+// DNS 服务器任务 - 劫持所有DNS请求并返回ESP32的IP（前向声明）
+static void dns_server_task(void *pvParameters);
+
 // 获取MAC地址后缀
 static void get_mac_suffix(char *buf, size_t len)
 {
