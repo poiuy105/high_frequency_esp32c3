@@ -1,393 +1,267 @@
-[09:31:20]I (115) esp_image: segment 2: paddr=00040020 vaddr=420000I (1114) wifi:(trc)rate(L-MCS7, schedIdx:1), ampdu(rate:L-MCS7, schedIdx(1, stop:8)), snr:56, ampduState:wait operational
-[09:31:20]I (1124) wifi:ifidx:1, rssi:-41, nf:-97, phytype(0x4, HT40-LGI), phymode(0x3, 11bgn), max_rate:0, he:0
-[09:31:20]I (1134) wifi:max ampdu length exponent:3(65535 bytes), mmss:5(4 us)
-[09:31:20]I (1134) wifi:station: 26:5d:d2:00:33:9a join, AID=1, bgn, 40U
-[09:31:20]I (1184) wifi:[ADDBA]TX addba request, tid:0, dialogtoken:1, bufsize:64, A-MSDU:0(not supported), policy:1(IMR), ssn:0(0x0)
-[09:31:20]I (1194) wifi:[ADDBA]RX addba response, status:0, tid:0/tb:1(0xa1), bufsize:64, batimeout:0, txa_wnd:64
-[09:31:20]W (1204) wifi:<ba-add>idx:4, ifx:1, tid:7, TAHI:0x1019a33, TALO:0xd25d26, (ssn:0, win:64, cur_ssn:0), CONF:0xc0007005
-[09:31:22]ESP-ROM:esp32c6-20220919
-[09:31:22]Build:Sep 19 2022
-[09:31:22]rst:0x15 (USB_UART_HPSYS),boot:0xc (SPI_FAST_FLASH_BOOT)
-[09:31:22]Saved PC:0x40805574
-[09:31:22]SPIWP:0xee
-[09:31:22]mode:DIO, clock div:2
-[09:31:22]load:0x40875720,len:0x1804
-[09:31:22]load:0x4086c410,len:0xe58
-[09:31:22]load:0x4086e610,len:0x2e24
-[09:31:22]entry 0x4086c41a
-[09:31:22]I (5) boot: ESP-IDF v5.2.1 2nd stage bootloader
-[09:31:22]I (5) boot: compile time May  8 2026 01:28:29
-[09:31:22]I (6) boot: chip revision: v0.2
-[09:31:22]I (8) boot.esp32c6: SPI Speed      : 80MHz
-[09:31:22]I (12) boot.esp32c6: SPI Mode       : DIO
-[09:31:22]I (17) boot.esp32c6: SPI Flash Size : 2MB
-[09:31:22]I (22) boot: Enabling RNG early entropy source...
-[09:31:22]I (27) boot: Partition Table:
-[09:31:22]I (31) boot: ## Label            Usage          Type ST Offset   Length
-[09:31:22]I (38) boot:  0 nvs              WiFi data        01 02 00009000 00006000
-[09:31:22]I (45) boot:  1 phy_init         RF data          01 01 0000f000 00001000
-[09:31:22]I (53) boot:  2 factory          factory app      00 00 00010000 00100000
-[09:31:22]I (61) boot: End of partition table
-[09:31:22]I (65) esp_image: segment 0: paddr=00010020 vaddr=420b8020 size=2b830h (178224) map
-[09:31:22]I (110) esp_image: segment 1: paddr=0003b858 vaddr=40800000 size=047c0h ( 18368) load
-[09:31:22]I (115) esp_image: segment 2: paddr=00040020 vaddr=42000020 size=b5074h (741492) map
-[09:31:22]I (269) esp_image: segment 3: paddr=000f509c vaddr=408047c0 size=1137ch ( 70524) load
-[09:31:23]I (286) esp_image: segment 4: paddr=00106420 vaddr=40815b40 size=0362ch ( 13868) load
-[09:31:23]I (296) boot: Loaded app from partition at offset 0x10000
-[09:31:23]I (296) boot: Disabling RNG early entropy source...
-[09:31:23]I (307) cpu_start: Unicore app
-[09:31:23]W (316) clk: esp_perip_clk_init() has not been implemented yet
-[09:31:23]I (323) cpu_start: Pro cpu start user code
-[09:31:23]I (323) cpu_start: cpu freq: 160000000 Hz
-[09:31:23]I (323) cpu_start: Application information:
-[09:31:23]I (326) cpu_start: Project name:     high_frequency
-[09:31:23]I (332) cpu_start: App version:      1563786
-[09:31:23]I (337) cpu_start: Compile time:     May  8 2026 01:28:23
-[09:31:23]I (343) cpu_start: ELF file SHA256:  c9a689101...
-[09:31:23]I (348) cpu_start: ESP-IDF:          v5.2.1
-[09:31:23]I (353) cpu_start: Min chip rev:     v0.0
-[09:31:23]I (358) cpu_start: Max chip rev:     v0.99 
-[09:31:23]I (362) cpu_start: Chip rev:         v0.2
-[09:31:23]I (367) heap_init: Initializing. RAM available for dynamic allocation:
-[09:31:23]I (374) heap_init: At 40820860 len 0005BDB0 (367 KiB): RAM
-[09:31:23]I (380) heap_init: At 4087C610 len 00002F54 (11 KiB): RAM
-[09:31:23]I (387) heap_init: At 50000000 len 00003FE8 (15 KiB): RTCRAM
-[09:31:23]I (394) spi_flash: detected chip: generic
-[09:31:23]I (398) spi_flash: flash io: dio
-[09:31:23]W (401) spi_flash: Detected size(16384k) larger than the size in the binary image header(2048k). Using the size in the binary image header.
-[09:31:23]I (415) sleep: Configure to isolate all GPIO pins in sleep state
-[09:31:23]I (422) sleep: Enable automatic switching of GPIO sleep configuration
-[09:31:23]I (429) coexist: coex firmware version: 77cd7f8
-[09:31:23]I (434) coexist: coexist rom version 5b8dcfa
-[09:31:23]I (439) main_task: Started on CPU0
-[09:31:23]I (439) main_task: Calling app_main()
-[09:31:23]I (439) MAIN: ========================================
-[09:31:23]I (449) MAIN: ESP32-C6 System Starting...
-[09:31:23]I (449) MAIN: Console: UART0 (RX=GPIO8, TX=GPIO9)
-[09:31:23]I (469) MAIN: NVS initialized successfully
-[09:31:23]W (469) NVS: NVS open failed: ESP_ERR_NVS_NOT_FOUND, using defaults
-[09:31:23]I (469) MAIN: Parameters loaded from NVS
-[09:31:23]I (479) gpio: GPIO[4]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 
-[09:31:23]I (489) gpio: GPIO[9]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 
-[09:31:23]I (499) MAIN: GPIO initialized: LED=4, KEY=9
-[09:31:23]I (499) MAIN: PWM initialized: freq=200000, duty=128, switch=0
-[09:31:23]I (509) MAIN: Key initialized
-[09:31:23]I (509) MAIN: No WiFi credentials, starting AP provisioning
-[09:31:23]I (519) WIFI_PROV: Starting AP provisioning...
-[09:31:23]I (519) WIFI_PROV: ========================================
-[09:31:23]I (529) WIFI_PROV: ===== AP 配网模式启动 =====
-[09:31:23]I (539) WIFI_PROV: 1. 连接WiFi热点: ESP32 High Frequency_379DA8
-[09:31:23]I (539) WIFI_PROV: 2. 热点无密码，直接连接
-[09:31:23]I (549) WIFI_PROV: 3. 浏览器会自动弹出配置页面
-[09:31:23]I (549) WIFI_PROV: 4. 或手动打开: http://192.168.4.1
-[09:31:23]I (559) WIFI_PROV: ========================================
-[09:31:23]I (569) pp: pp rom version: 5b8dcfa
-[09:31:23]I (569) net80211: net80211 rom version: 5b8dcfa
-[09:31:23]I (589) wifi:wifi driver task: 408296e4, prio:23, stack:6656, core=0
-[09:31:23]I (589) wifi:wifi firmware version: a9f5b59
-[09:31:23]I (589) wifi:wifi certification version: v7.0
-[09:31:23]I (589) wifi:config NVS flash: enabled
-[09:31:23]I (589) wifi:config nano formating: disabled
-[09:31:23]I (599) wifi:mac_version:HAL_MAC_ESP32AX_761,ut_version:N
-[09:31:23]I (599) wifi:Init data frame dynamic rx buffer num: 32
-[09:31:23]I (609) wifi:Init static rx mgmt buffer num: 5
-[09:31:23]I (609) wifi:Init management short buffer num: 32
-[09:31:23]I (619) wifi:Init dynamic tx buffer num: 32
-[09:31:23]I (619) wifi:Init static tx FG buffer num: 2
-[09:31:23]I (619) wifi:Init static rx buffer size: 1700
-[09:31:23]I (629) wifi:Init static rx buffer num: 10
-[09:31:23]I (629) wifi:Init dynamic rx buffer num: 32
-[09:31:23]I (639) wifi_init: rx ba win: 6
-[09:31:23]I (639) wifi_init: tcpip mbox: 32
-[09:31:23]I (639) wifi_init: udp mbox: 6
-[09:31:23]I (649) wifi_init: tcp mbox: 6
-[09:31:23]I (649) wifi_init: tcp tx win: 5760
-[09:31:23]I (649) wifi_init: tcp rx win: 5760
-[09:31:23]I (659) wifi_init: tcp mss: 1440
-[09:31:23]I (659) wifi_init: WiFi IRAM OP enabled
-[09:31:23]I (669) wifi_init: WiFi RX IRAM OP enabled
-[09:31:23]I (669) phy_init: phy_version 250,e14681b,Jan 24 2024,17:43:11
-[09:31:23]W (769) wifi:(bf)761:0x600a7cac:0x01b4b4b0
-[09:31:23]W (769) wifi:(agc)0x600a7128:0xd20e0800, min.avgNF:0xce->0xd2(dB), RCalCount:0xe0, min.RRssi:0x800(-128.00)
-[09:31:23]W (769) wifi:(TB)WDEV_PWR_TB_MCS0:19
-[09:31:23]W (769) wifi:(TB)WDEV_PWR_TB_MCS1:19
-[09:31:23]W (769) wifi:(TB)WDEV_PWR_TB_MCS2:19
-[09:31:23]W (779) wifi:(TB)WDEV_PWR_TB_MCS3:19
-[09:31:23]W (779) wifi:(TB)WDEV_PWR_TB_MCS4:19
-[09:31:23]W (779) wifi:(TB)WDEV_PWR_TB_MCS5:19
-[09:31:23]W (789) wifi:(TB)WDEV_PWR_TB_MCS6:18
-[09:31:23]W (789) wifi:(TB)WDEV_PWR_TB_MCS7:18
-[09:31:23]W (789) wifi:(TB)WDEV_PWR_TB_MCS8:17
-[09:31:23]W (799) wifi:(TB)WDEV_PWR_TB_MCS9:15
-[09:31:23]W (799) wifi:(TB)WDEV_PWR_TB_MCS10:15
-[09:31:23]W (799) wifi:(TB)WDEV_PWR_TB_MCS11:15
-[09:31:23]I (809) wifi:11ax coex: WDEVAX_PTI0(0x55777555), WDEVAX_PTI1(0x00003377).
-[09:31:23]
-[09:31:23]I (809) wifi:mode : softAP (58:8c:81:37:9d:a9)
-[09:31:23]I (819) wifi:Total power save buffer number: 16
-[09:31:23]I (819) wifi:Init max length of beacon: 752/752
-[09:31:23]I (829) wifi:Init max length of beacon: 752/752
-[09:31:23]I (829) esp_netif_lwip: DHCP server started on interface WIFI_AP_DEF with IP: 192.168.4.1
-[09:31:23]I (839) WIFI_PROV: SoftAP started: SSID=ESP32 High Frequency_379DA8 (no password)
-[09:31:23]I (849) WIFI_PROV: DHCP server configured with DNS: 192.168.4.1
-[09:31:23]I (859) WIFI_PROV: DNS server socket created
-[09:31:23]I (859) WIFI_PROV: DNS server bound to port 53
-[09:31:23]I (869) WIFI_PROV: DNS hijacking server started
-[09:31:23]I (869) WIFI_PROV: Registered captive URL: /generate_204
-[09:31:23]I (879) WIFI_PROV: Registered captive URL: /gen_204
-[09:31:23]I (879) WIFI_PROV: HTTP server started, connect to http://192.168.4.1
-[09:31:23]I (889) main_task: Returned from app_main()
-[09:31:24]I (1629) wifi:new:<1,1>, old:<1,1>, ap:<1,1>, sta:<255,255>, prof:1
-[09:31:24]I (1629) wifi:(trc)phytype:HT40-LGI, snr:38, maxRate:0, highestRateIdx:1
-[09:31:24]I (1629) wifi:(trc)rate(L-MCS7, schedIdx:1), ampdu(rate:L-MCS7, schedIdx(1, stop:8)), snr:38, ampduState:wait operational
-[09:31:24]I (1639) wifi:ifidx:1, rssi:-59, nf:-97, phytype(0x4, HT40-LGI), phymode(0x3, 11bgn), max_rate:0, he:0
-[09:31:24]I (1649) wifi:max ampdu length exponent:3(65535 bytes), mmss:5(4 us)
-[09:31:24]I (1659) wifi:station: 26:5d:d2:00:33:9a join, AID=1, bgn, 40U
-[09:31:24]I (1689) wifi:[ADDBA]TX addba request, tid:0, dialogtoken:1, bufsize:64, A-MSDU:0(not supported), policy:1(IMR), ssn:0(0x0)
-[09:31:24]I (1689) wifi:[ADDBA]RX addba response, status:0, tid:0/tb:1(0xa1), bufsize:64, batimeout:0, txa_wnd:64
-[09:31:25]W (3039) wifi:<ba-add>idx:4, ifx:1, tid:7, TAHI:0x1019a33, TALO:0xd25d26, (ssn:0, win:64, cur_ssn:0), CONF:0xc0007005
-[09:31:26]I (3319) WIFI_PROV: DNS request from 192.168.4.2 (len=41)
-[09:31:26]I (3319) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (57 bytes)
-[09:31:26]I (3329) WIFI_PROV: DNS request from 192.168.4.2 (len=38)
-[09:31:26]I (3329) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (54 bytes)
-[09:31:26]I (3669) WIFI_PROV: DNS request from 192.168.4.2 (len=28)
-[09:31:26]I (3669) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (44 bytes)
-[09:31:26]I (3779) WIFI_PROV: DNS request from 192.168.4.2 (len=31)
-[09:31:26]I (3779) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (47 bytes)
-[09:31:27]I (4789) WIFI_PROV: DNS request from 192.168.4.2 (len=32)
-[09:31:27]I (4789) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (48 bytes)
-[09:31:28]I (5309) WIFI_PROV: DNS request from 192.168.4.2 (len=36)
-[09:31:28]I (5309) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (52 bytes)
-[09:31:28]W (5349) httpd_uri: httpd_uri: URI '/mmtls/285c4543' not found
-[09:31:28]W (5349) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
-[09:31:28]I (5509) WIFI_PROV: DNS request from 192.168.4.2 (len=50)
-[09:31:28]I (5509) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (66 bytes)
-[09:31:29]I (6779) WIFI_PROV: DNS request from 192.168.4.2 (len=42)
-[09:31:29]I (6779) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (58 bytes)
-[09:31:29]I (7189) WIFI_PROV: DNS request from 192.168.4.2 (len=36)
-[09:31:29]I (7189) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (52 bytes)
-[09:31:30]I (7419) WIFI_PROV: DNS request from 192.168.4.2 (len=37)
-[09:31:30]I (7419) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (53 bytes)
-[09:31:30]W (7429) httpd_parse: parse_block: incomplete (0/128) with parser error = 16
-[09:31:30]W (7429) httpd_txrx: httpd_resp_send_err: 400 Bad Request - Bad request syntax
-[09:31:30]I (7649) WIFI_PROV: DNS request from 192.168.4.2 (len=42)
-[09:31:30]I (7659) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (58 bytes)
-[09:31:30]I (8229) wifi:station: 26:5d:d2:00:33:9a leave, AID = 1, bss_flags is 33688691, bss:0x40822adc
-[09:31:30]I (8229) wifi:ifidx:1, rssi:-54, nf:-97, phytype(0x4, HT40-LGI), phymode(0x3, 11bgn), max_rate:0, he:0
-[09:31:30]I (8239) wifi:max ampdu length exponent:3(65535 bytes), mmss:5(4 us)
-[09:31:30]I (8239) wifi:new:<1,0>, old:<1,1>, ap:<1,1>, sta:<255,255>, prof:1
-[09:31:30]I (8249) wifi:<ba-del>idx:4, tid:7
-[09:31:33]ESP-ROM:esp32c6-20220919
-[09:31:33]Build:Sep 19 2022
-[09:31:33]rst:0x15 (USB_UART_HPSYS),boot:0xc (SPI_FAST_FLASH_BOOT)
-[09:31:33]Saved PC:0x40805574
-[09:31:33]SPIWP:0xee
-[09:31:33]mode:DIO, clock div:2
-[09:31:33]load:0x40875720,len:0x1804
-[09:31:33]load:0x4086c410,len:0xe58
-[09:31:33]load:0x4086e610,len:0x2e24
-[09:31:33]entry 0x4086c41a
-[09:31:33]I (5) boot: ESP-IDF v5.2.1 2nd stage bootloader
-[09:31:33]I (5) boot: compile time May  8 2026 01:28:29
-[09:31:33]I (6) boot: chip revision: v0.2
-[09:31:33]I (8) boot.esp32c6: SPI Speed      : 80MHz
-[09:31:33]I (12) boot.esp32c6: SPI Mode       : DIO
-[09:31:33]I (17) boot.esp32c6: SPI Flash Size : 2MB
-[09:31:33]I (22) boot: Enabling RNG early entropy source...
-[09:31:33]I (27) boot: Partition Table:
-[09:31:33]I (31) boot: ## Label            Usage          Type ST Offset   Length
-[09:31:33]I (38) boot:  0 nvs              WiFi data        01 02 00009000 00006000
-[09:31:33]I (45) boot:  1 phy_init         RF data          01 01 0000f000 00001000
-[09:31:33]I (53) boot:  2 factory          factory app      00 00 00010000 00100000
-[09:31:33]I (61) boot: End of partition table
-[09:31:33]I (65) esp_image: segment 0: paddr=00010020 vaddr=420b8020 size=2b830h (178224) map
-[09:31:33]I (110) esp_image: segment 1: paddr=0003b858 vaddr=40800000 size=047c0h ( 18368) load
-[09:31:33]I (115) esp_image: segment 2: paddr=00040020 vaddr=42000020 size=b5074h (741492) map
-[09:31:33]I (269) esp_image: segment 3: paddr=000f509c vaddr=408047c0 size=1137ch ( 70524) load
-[09:31:33]I (286) esp_image: segment 4: paddr=00106420 vaddr=40815b40 size=0362ch ( 13868) load
-[09:31:33]I (296) boot: Loaded app from partition at offset 0x10000
-[09:31:33]I (296) boot: Disabling RNG early entropy source...
-[09:31:33]I (307) cpu_start: Unicore app
-[09:31:33]W (316) clk: esp_perip_clk_init() has not been implemented yet
-[09:31:33]I (323) cpu_start: Pro cpu start user code
-[09:31:33]I (323) cpu_start: cpu freq: 160000000 Hz
-[09:31:33]I (323) cpu_start: Application information:
-[09:31:33]I (326) cpu_start: Project name:     high_frequency
-[09:31:33]I (332) cpu_start: App version:      1563786
-[09:31:33]I (337) cpu_start: Compile time:     May  8 2026 01:28:23
-[09:31:33]I (343) cpu_start: ELF file SHA256:  c9a689101...
-[09:31:33]I (348) cpu_start: ESP-IDF:          v5.2.1
-[09:31:33]I (353) cpu_start: Min chip rev:     v0.0
-[09:31:33]I (358) cpu_start: Max chip rev:     v0.99 
-[09:31:33]I (362) cpu_start: Chip rev:         v0.2
-[09:31:33]I (367) heap_init: Initializing. RAM available for dynamic allocation:
-[09:31:33]I (374) heap_init: At 40820860 len 0005BDB0 (367 KiB): RAM
-[09:31:33]I (380) heap_init: At 4087C610 len 00002F54 (11 KiB): RAM
-[09:31:33]I (387) heap_init: At 50000000 len 00003FE8 (15 KiB): RTCRAM
-[09:31:33]I (394) spi_flash: detected chip: generic
-[09:31:33]I (398) spi_flash: flash io: dio
-[09:31:33]W (401) spi_flash: Detected size(16384k) larger than the size in the binary image header(2048k). Using the size in the binary image header.
-[09:31:33]I (415) sleep: Configure to isolate all GPIO pins in sleep state
-[09:31:33]I (422) sleep: Enable automatic switching of GPIO sleep configuration
-[09:31:33]I (429) coexist: coex firmware version: 77cd7f8
-[09:31:33]I (434) coexist: coexist rom version 5b8dcfa
-[09:31:33]I (439) main_task: Started on CPU0
-[09:31:33]I (439) main_task: Calling app_main()
-[09:31:33]I (439) MAIN: ========================================
-[09:31:33]I (449) MAIN: ESP32-C6 System Starting...
-[09:31:33]I (449) MAIN: Console: UART0 (RX=GPIO8, TX=GPIO9)
-[09:31:33]I (469) MAIN: NVS initialized successfully
-[09:31:33]W (469) NVS: NVS open failed: ESP_ERR_NVS_NOT_FOUND, using defaults
-[09:31:33]I (469) MAIN: Parameters loaded from NVS
-[09:31:33]I (479) gpio: GPIO[4]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 
-[09:31:33]I (489) gpio: GPIO[9]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 
-[09:31:33]I (499) MAIN: GPIO initialized: LED=4, KEY=9
-[09:31:33]I (499) MAIN: PWM initialized: freq=200000, duty=128, switch=0
-[09:31:33]I (509) MAIN: Key initialized
-[09:31:33]I (509) MAIN: No WiFi credentials, starting AP provisioning
-[09:31:33]I (519) WIFI_PROV: Starting AP provisioning...
-[09:31:33]I (519) WIFI_PROV: ========================================
-[09:31:33]I (529) WIFI_PROV: ===== AP 配网模式启动 =====
-[09:31:33]I (539) WIFI_PROV: 1. 连接WiFi热点: ESP32 High Frequency_379DA8
-[09:31:33]I (539) WIFI_PROV: 2. 热点无密码，直接连接
-[09:31:33]I (549) WIFI_PROV: 3. 浏览器会自动弹出配置页面
-[09:31:33]I (549) WIFI_PROV: 4. 或手动打开: http://192.168.4.1
-[09:31:33]I (559) WIFI_PROV: ========================================
-[09:31:33]I (569) pp: pp rom version: 5b8dcfa
-[09:31:33]I (569) net80211: net80211 rom version: 5b8dcfa
-[09:31:33]I (589) wifi:wifi driver task: 408296e4, prio:23, stack:6656, core=0
-[09:31:33]I (589) wifi:wifi firmware version: a9f5b59
-[09:31:33]I (589) wifi:wifi certification version: v7.0
-[09:31:33]I (589) wifi:config NVS flash: enabled
-[09:31:33]I (589) wifi:config nano formating: disabled
-[09:31:33]I (599) wifi:mac_version:HAL_MAC_ESP32AX_761,ut_version:N
-[09:31:33]I (599) wifi:Init data frame dynamic rx buffer num: 32
-[09:31:34]I (609) wifi:Init static rx mgmt buffer num: 5
-[09:31:34]I (609) wifi:Init management short buffer num: 32
-[09:31:34]I (619) wifi:Init dynamic tx buffer num: 32
-[09:31:34]I (619) wifi:Init static tx FG buffer num: 2
-[09:31:34]I (619) wifi:Init static rx buffer size: 1700
-[09:31:34]I (629) wifi:Init static rx buffer num: 10
-[09:31:34]I (629) wifi:Init dynamic rx buffer num: 32
-[09:31:34]I (639) wifi_init: rx ba win: 6
-[09:31:34]I (639) wifi_init: tcpip mbox: 32
-[09:31:34]I (639) wifi_init: udp mbox: 6
-[09:31:34]I (649) wifi_init: tcp mbox: 6
-[09:31:34]I (649) wifi_init: tcp tx win: 5760
-[09:31:34]I (649) wifi_init: tcp rx win: 5760
-[09:31:34]I (659) wifi_init: tcp mss: 1440
-[09:31:34]I (659) wifi_init: WiFi IRAM OP enabled
-[09:31:34]I (669) wifi_init: WiFi RX IRAM OP enabled
-[09:31:34]I (669) phy_init: phy_version 250,e14681b,Jan 24 2024,17:43:11
-[09:31:34]W (769) wifi:(bf)761:0x600a7cac:0x01b4b4b0
-[09:31:34]W (769) wifi:(agc)0x600a7128:0xd21bb800, min.avgNF:0xce->0xd2(dB), RCalCount:0x1bb, min.RRssi:0x800(-128.00)
-[09:31:34]W (769) wifi:(TB)WDEV_PWR_TB_MCS0:19
-[09:31:34]W (769) wifi:(TB)WDEV_PWR_TB_MCS1:19
-[09:31:34]W (779) wifi:(TB)WDEV_PWR_TB_MCS2:19
-[09:31:34]W (779) wifi:(TB)WDEV_PWR_TB_MCS3:19
-[09:31:34]W (779) wifi:(TB)WDEV_PWR_TB_MCS4:19
-[09:31:34]W (789) wifi:(TB)WDEV_PWR_TB_MCS5:19
-[09:31:34]W (789) wifi:(TB)WDEV_PWR_TB_MCS6:18
-[09:31:34]W (789) wifi:(TB)WDEV_PWR_TB_MCS7:18
-[09:31:34]W (799) wifi:(TB)WDEV_PWR_TB_MCS8:17
-[09:31:34]W (799) wifi:(TB)WDEV_PWR_TB_MCS9:15
-[09:31:34]W (799) wifi:(TB)WDEV_PWR_TB_MCS10:15
-[09:31:34]W (809) wifi:(TB)WDEV_PWR_TB_MCS11:15
-[09:31:34]I (809) wifi:11ax coex: WDEVAX_PTI0(0x55777555), WDEVAX_PTI1(0x00003377).
-[09:31:34]
-[09:31:34]I (819) wifi:mode : softAP (58:8c:81:37:9d:a9)
-[09:31:34]I (819) wifi:Total power save buffer number: 16
-[09:31:34]I (819) wifi:Init max length of beacon: 752/752
-[09:31:34]I (829) wifi:Init max length of beacon: 752/752
-[09:31:34]I (829) esp_netif_lwip: DHCP server started on interface WIFI_AP_DEF with IP: 192.168.4.1
-[09:31:34]I (839) WIFI_PROV: SoftAP started: SSID=ESP32 High Frequency_379DA8 (no password)
-[09:31:34]I (849) WIFI_PROV: DHCP server configured with DNS: 192.168.4.1
-[09:31:34]I (859) WIFI_PROV: DNS server socket created
-[09:31:34]I (859) WIFI_PROV: DNS server bound to port 53
-[09:31:34]I (869) WIFI_PROV: DNS hijacking server started
-[09:31:34]I (869) WIFI_PROV: Registered captive URL: /generate_204
-[09:31:34]I (879) WIFI_PROV: Registered captive URL: /gen_204
-[09:31:34]I (879) WIFI_PROV: HTTP server started, connect to http://192.168.4.1
-[09:31:34]I (889) main_task: Returned from app_main()
-[09:31:37]I (3849) wifi:new:<1,1>, old:<1,1>, ap:<1,1>, sta:<255,255>, prof:1
-[09:31:37]I (3849) wifi:(trc)phytype:HT40-LGI, snr:33, maxRate:0, highestRateIdx:1
-[09:31:37]I (3849) wifi:(trc)rate(L-MCS6, schedIdx:2), ampdu(rate:L-MCS6, schedIdx(2, stop:8)), snr:33, ampduState:wait operational
-[09:31:37]I (3859) wifi:ifidx:1, rssi:-64, nf:-97, phytype(0x4, HT40-LGI), phymode(0x3, 11bgn), max_rate:0, he:0
-[09:31:37]I (3869) wifi:max ampdu length exponent:3(65535 bytes), mmss:5(4 us)
-[09:31:37]I (3879) wifi:station: 26:5d:d2:00:33:9a join, AID=1, bgn, 40U
-[09:31:37]W (3959) wifi:<ba-add>idx:4, ifx:1, tid:0, TAHI:0x1019a33, TALO:0xd25d26, (ssn:0, win:64, cur_ssn:0), CONF:0xc0000005
-[09:31:37]I (3999) esp_netif_lwip: DHCP server assigned IP to a client, IP is: 192.168.4.2
-[09:31:37]I (4029) wifi:[ADDBA]TX addba request, tid:0, dialogtoken:1, bufsize:64, A-MSDU:0(not supported), policy:1(IMR), ssn:0(0x0)
-[09:31:37]I (4039) wifi:[ADDBA]RX addba response, status:0, tid:0/tb:1(0xa1), bufsize:64, batimeout:0, txa_wnd:64
-[09:31:37]I (4179) WIFI_PROV: DNS request from 192.168.4.2 (len=38)
-[09:31:37]I (4179) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (54 bytes)
-[09:31:37]I (4189) WIFI_PROV: DNS request from 192.168.4.2 (len=31)
-[09:31:37]I (4189) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (47 bytes)
-[09:31:37]I (4209) WIFI_PROV: Captive portal detection handled
-[09:31:37]I (4309) WIFI_PROV: DNS request from 192.168.4.2 (len=34)
-[09:31:37]I (4309) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (50 bytes)
-[09:31:37]I (4379) WIFI_PROV: DNS request from 192.168.4.2 (len=34)
-[09:31:37]I (4379) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (50 bytes)
-[09:31:37]I (4409) WIFI_PROV: DNS request from 192.168.4.2 (len=36)
-[09:31:37]I (4409) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (52 bytes)
-[09:31:37]I (4569) WIFI_PROV: DNS request from 192.168.4.2 (len=41)
-[09:31:37]I (4569) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (57 bytes)
-[09:31:38]I (4929) WIFI_PROV: DNS request from 192.168.4.2 (len=38)
-[09:31:38]I (4929) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (54 bytes)
-[09:31:38]W (4959) httpd_uri: httpd_uri: URI '/mmtls/213358a1' not found
-[09:31:38]W (4959) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
-[09:31:38]W (4969) httpd_parse: parse_block: incomplete (0/128) with parser error = 16
-[09:31:38]W (4979) httpd_txrx: httpd_resp_send_err: 400 Bad Request - Bad request syntax
-[09:31:38]I (4989) WIFI_PROV: DNS request from 192.168.4.2 (len=40)
-[09:31:38]I (4989) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (56 bytes)
-[09:31:38]I (4999) WIFI_PROV: DNS request from 192.168.4.2 (len=36)
-[09:31:38]I (4999) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (52 bytes)
-[09:31:38]I (5079) WIFI_PROV: DNS request from 192.168.4.2 (len=38)
-[09:31:38]I (5079) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (54 bytes)
-[09:31:38]I (5079) WIFI_PROV: DNS request from 192.168.4.2 (len=42)
-[09:31:38]I (5089) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (58 bytes)
-[09:31:38]I (5099) WIFI_PROV: DNS request from 192.168.4.2 (len=33)
-[09:31:38]I (5099) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (49 bytes)
-[09:31:38]W (5109) httpd_uri: httpd_uri: URI '/mmtls/213358a1' not found
-[09:31:38]W (5119) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
-[09:31:38]W (5129) httpd_uri: httpd_uri: URI '/mmtls/213358a1' not found
-[09:31:38]W (5129) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
-[09:31:38]W (5169) httpd_uri: httpd_uri: URI '/wifi/cw.html' not found
-[09:31:38]W (5169) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
-[09:31:38]I (5259) WIFI_PROV: Captive portal detection handled
-[09:31:39]W (6259) httpd_uri: httpd_uri: URI '/mmtls/0ef78316' not found
-[09:31:39]W (6259) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
-[09:31:39]I (6299) WIFI_PROV: DNS request from 192.168.4.2 (len=45)
-[09:31:39]I (6299) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (61 bytes)
-[09:31:40]I (6909) WIFI_PROV: DNS request from 192.168.4.2 (len=28)
-[09:31:40]I (6909) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (44 bytes)
-[09:31:40]I (6909) WIFI_PROV: DNS request from 192.168.4.2 (len=28)
-[09:31:40]I (6919) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (44 bytes)
-[09:31:40]I (6929) WIFI_PROV: DNS request from 192.168.4.2 (len=31)
-[09:31:40]I (6929) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (47 bytes)
-[09:31:40]W (6989) httpd_uri: httpd_uri: URI '/mmtls/3d0ec956' not found
-[09:31:40]W (6989) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
-[09:31:40]W (7189) httpd_parse: parse_block: incomplete (0/128) with parser error = 16
-[09:31:40]W (7189) httpd_txrx: httpd_resp_send_err: 400 Bad Request - Bad request syntax
-[09:31:40]I (7319) WIFI_PROV: Captive portal detection handled
-[09:31:40]I (7389) WIFI_PROV: DNS request from 192.168.4.2 (len=37)
-[09:31:40]I (7389) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (53 bytes)
-[09:31:40]I (7459) WIFI_PROV: Captive portal detection handled
-[09:31:41]I (7879) WIFI_PROV: DNS request from 192.168.4.2 (len=39)
-[09:31:41]I (7889) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (55 bytes)
-[09:31:41]I (8399) WIFI_PROV: DNS request from 192.168.4.2 (len=37)
-[09:31:41]I (8399) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (53 bytes)
-[09:31:42]W (9129) httpd_parse: parse_block: incomplete (0/128) with parser error = 16
-[09:31:42]W (9129) httpd_txrx: httpd_resp_send_err: 400 Bad Request - Bad request syntax
-[09:31:44]I (10609) WIFI_PROV: DNS request from 192.168.4.2 (len=45)
-[09:31:44]I (10609) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (61 bytes)
-[09:31:44]I (11369) WIFI_PROV: Captive portal detection handled
-[09:31:48]I (15459) WIFI_PROV: DNS request from 192.168.4.2 (len=44)
-[09:31:48]I (15459) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (60 bytes)
-[09:31:48]W (15489) httpd_uri: httpd_uri: URI '/mmtls/2bb5ff52' not found
-[09:31:48]W (15489) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
-[09:31:50]W (17499) httpd_uri: httpd_uri: URI '/mmtls/474277f4' not found
-[09:31:50]W (17499) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
-[09:31:52]I (19419) WIFI_PROV: Captive portal detection handled
-[09:31:55]I (22479) WIFI_PROV: DNS request from 192.168.4.2 (len=31)
-[09:31:55]I (22479) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (47 bytes)
+[09:36:20]I (110) esp_image: segment 1: paddr=0003b940 vaddr=408000ESP-ROM:esp32c6-20220919
+[09:36:20]Build:Sep 19 2022
+[09:36:20]rst:0x15 (USB_UART_HPSYS),boot:0xc (SPI_FAST_FLASH_BOOT)
+[09:36:20]Saved PC:0x40805574
+[09:36:20]SPIWP:0xee
+[09:36:20]mode:DIO, clock div:2
+[09:36:20]load:0x40875720,len:0x1804
+[09:36:20]load:0x4086c410,len:0xe58
+[09:36:20]load:0x4086e610,len:0x2e24
+[09:36:20]entry 0x4086c41a
+[09:36:20]I (5) boot: ESP-IDF v5.2.1 2nd stage bootloader
+[09:36:20]I (5) boot: compile time May  8 2026 01:34:36
+[09:36:20]I (6) boot: chip revision: v0.2
+[09:36:20]I (8) boot.esp32c6: SPI Speed      : 80MHz
+[09:36:20]I (12) boot.esp32c6: SPI Mode       : DIO
+[09:36:20]I (17) boot.esp32c6: SPI Flash Size : 2MB
+[09:36:20]I (22) boot: Enabling RNG early entropy source...
+[09:36:20]I (27) boot: Partition Table:
+[09:36:20]I (31) boot: ## Label            Usage          Type ST Offset   Length
+[09:36:20]I (38) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+[09:36:20]I (45) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+[09:36:20]I (53) boot:  2 factory          factory app      00 00 00010000 00100000
+[09:36:20]I (61) boot: End of partition table
+[09:36:20]I (65) esp_image: segment 0: paddr=00010020 vaddr=420b8020 size=2b918h (178456) map
+[09:36:20]I (110) esp_image: segment 1: paddr=0003b940 vaddr=40800000 size=046d8h ( 18136) load
+[09:36:20]I (115) esp_image: segment 2: paddr=00040020 vaddr=42000020 size=b518ch (741772) map
+[09:36:20]I (269) esp_image: segment 3: paddr=000f51b4 vaddr=408046d8 size=11464h ( 70756) load
+[09:36:20]I (286) esp_image: segment 4: paddr=00106620 vaddr=40815b40 size=0362ch ( 13868) load
+[09:36:20]I (296) boot: Loaded app from partition at offset 0x10000
+[09:36:20]I (296) boot: Disabling RNG early entropy source...
+[09:36:20]I (307) cpu_start: Unicore app
+[09:36:20]W (316) clk: esp_perip_clk_init() has not been implemented yet
+[09:36:20]I (323) cpu_start: Pro cpu start user code
+[09:36:20]I (323) cpu_start: cpu freq: 160000000 Hz
+[09:36:20]I (323) cpu_start: Application information:
+[09:36:20]I (326) cpu_start: Project name:     high_frequency
+[09:36:20]I (332) cpu_start: App version:      0140487
+[09:36:20]I (336) cpu_start: Compile time:     May  8 2026 01:34:29
+[09:36:20]I (343) cpu_start: ELF file SHA256:  757c283ed...
+[09:36:20]I (348) cpu_start: ESP-IDF:          v5.2.1
+[09:36:20]I (353) cpu_start: Min chip rev:     v0.0
+[09:36:20]I (358) cpu_start: Max chip rev:     v0.99 
+[09:36:20]I (362) cpu_start: Chip rev:         v0.2
+[09:36:20]I (367) heap_init: Initializing. RAM available for dynamic allocation:
+[09:36:20]I (374) heap_init: At 40820860 len 0005BDB0 (367 KiB): RAM
+[09:36:20]I (380) heap_init: At 4087C610 len 00002F54 (11 KiB): RAM
+[09:36:21]I (387) heap_init: At 50000000 len 00003FE8 (15 KiB): RTCRAM
+[09:36:21]I (394) spi_flash: detected chip: generic
+[09:36:21]I (398) spi_flash: flash io: dio
+[09:36:21]W (401) spi_flash: Detected size(16384k) larger than the size in the binary image header(2048k). Using the size in the binary image header.
+[09:36:21]I (415) sleep: Configure to isolate all GPIO pins in sleep state
+[09:36:21]I (422) sleep: Enable automatic switching of GPIO sleep configuration
+[09:36:21]I (429) coexist: coex firmware version: 77cd7f8
+[09:36:21]I (434) coexist: coexist rom version 5b8dcfa
+[09:36:21]I (439) main_task: Started on CPU0
+[09:36:21]I (439) main_task: Calling app_main()
+[09:36:21]I (439) MAIN: ========================================
+[09:36:21]I (449) MAIN: ESP32-C6 System Starting...
+[09:36:21]I (449) MAIN: Console: UART0 (RX=GPIO8, TX=GPIO9)
+[09:36:21]I (469) MAIN: NVS initialized successfully
+[09:36:21]W (469) NVS: NVS open failed: ESP_ERR_NVS_NOT_FOUND, using defaults
+[09:36:21]I (469) MAIN: Parameters loaded from NVS
+[09:36:21]I (479) gpio: GPIO[4]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 
+[09:36:21]I (489) gpio: GPIO[9]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 
+[09:36:21]I (499) MAIN: GPIO initialized: LED=4, KEY=9
+[09:36:21]I (499) MAIN: PWM initialized: freq=200000, duty=128, switch=0
+[09:36:21]I (509) MAIN: Key initialized
+[09:36:21]I (509) MAIN: No WiFi credentials, starting AP provisioning
+[09:36:21]I (519) WIFI_PROV: Starting AP provisioning...
+[09:36:21]I (519) WIFI_PROV: ========================================
+[09:36:21]I (529) WIFI_PROV: ===== AP 配网模式启动 =====
+[09:36:21]I (539) WIFI_PROV: 1. 连接WiFi热点: ESP32 High Frequency_379DA8
+[09:36:21]I (539) WIFI_PROV: 2. 热点无密码，直接连接
+[09:36:21]I (549) WIFI_PROV: 3. 浏览器会自动弹出配置页面
+[09:36:21]I (549) WIFI_PROV: 4. 或手动打开: http://192.168.4.1
+[09:36:21]I (559) WIFI_PROV: ========================================
+[09:36:21]I (569) pp: pp rom version: 5b8dcfa
+[09:36:21]I (569) net80211: net80211 rom version: 5b8dcfa
+[09:36:21]I (589) wifi:wifi driver task: 408296e4, prio:23, stack:6656, core=0
+[09:36:21]I (589) wifi:wifi firmware version: a9f5b59
+[09:36:21]I (589) wifi:wifi certification version: v7.0
+[09:36:21]I (589) wifi:config NVS flash: enabled
+[09:36:21]I (589) wifi:config nano formating: disabled
+[09:36:21]I (599) wifi:mac_version:HAL_MAC_ESP32AX_761,ut_version:N
+[09:36:21]I (599) wifi:Init data frame dynamic rx buffer num: 32
+[09:36:21]I (609) wifi:Init static rx mgmt buffer num: 5
+[09:36:21]I (609) wifi:Init management short buffer num: 32
+[09:36:21]I (619) wifi:Init dynamic tx buffer num: 32
+[09:36:21]I (619) wifi:Init static tx FG buffer num: 2
+[09:36:21]I (619) wifi:Init static rx buffer size: 1700
+[09:36:21]I (629) wifi:Init static rx buffer num: 10
+[09:36:21]I (629) wifi:Init dynamic rx buffer num: 32
+[09:36:21]I (639) wifi_init: rx ba win: 6
+[09:36:21]I (639) wifi_init: tcpip mbox: 32
+[09:36:21]I (639) wifi_init: udp mbox: 6
+[09:36:21]I (649) wifi_init: tcp mbox: 6
+[09:36:21]I (649) wifi_init: tcp tx win: 5760
+[09:36:21]I (649) wifi_init: tcp rx win: 5760
+[09:36:21]I (659) wifi_init: tcp mss: 1440
+[09:36:21]I (659) wifi_init: WiFi IRAM OP enabled
+[09:36:21]I (669) wifi_init: WiFi RX IRAM OP enabled
+[09:36:21]I (669) phy_init: phy_version 250,e14681b,Jan 24 2024,17:43:11
+[09:36:21]W (769) wifi:(bf)761:0x600a7cac:0x01b4b4b0
+[09:36:21]W (769) wifi:(agc)0x600a7128:0xd2080800, min.avgNF:0xce->0xd2(dB), RCalCount:0x80, min.RRssi:0x800(-128.00)
+[09:36:21]W (769) wifi:(TB)WDEV_PWR_TB_MCS0:19
+[09:36:21]W (769) wifi:(TB)WDEV_PWR_TB_MCS1:19
+[09:36:21]W (779) wifi:(TB)WDEV_PWR_TB_MCS2:19
+[09:36:21]W (779) wifi:(TB)WDEV_PWR_TB_MCS3:19
+[09:36:21]W (779) wifi:(TB)WDEV_PWR_TB_MCS4:19
+[09:36:21]W (789) wifi:(TB)WDEV_PWR_TB_MCS5:19
+[09:36:21]W (789) wifi:(TB)WDEV_PWR_TB_MCS6:18
+[09:36:21]W (789) wifi:(TB)WDEV_PWR_TB_MCS7:18
+[09:36:21]W (799) wifi:(TB)WDEV_PWR_TB_MCS8:17
+[09:36:21]W (799) wifi:(TB)WDEV_PWR_TB_MCS9:15
+[09:36:21]W (799) wifi:(TB)WDEV_PWR_TB_MCS10:15
+[09:36:21]W (809) wifi:(TB)WDEV_PWR_TB_MCS11:15
+[09:36:21]I (809) wifi:11ax coex: WDEVAX_PTI0(0x55777555), WDEVAX_PTI1(0x00003377).
+[09:36:21]
+[09:36:21]I (819) wifi:mode : softAP (58:8c:81:37:9d:a9)
+[09:36:21]I (819) wifi:Total power save buffer number: 16
+[09:36:21]I (819) wifi:Init max length of beacon: 752/752
+[09:36:21]I (829) wifi:Init max length of beacon: 752/752
+[09:36:21]I (829) esp_netif_lwip: DHCP server started on interface WIFI_AP_DEF with IP: 192.168.4.1
+[09:36:21]I (839) WIFI_PROV: SoftAP started: SSID=ESP32 High Frequency_379DA8 (no password)
+[09:36:21]I (849) WIFI_PROV: DHCP server configured with DNS: 192.168.4.1
+[09:36:21]I (859) WIFI_PROV: DNS server socket created
+[09:36:21]I (859) WIFI_PROV: DNS server bound to port 53
+[09:36:21]I (869) WIFI_PROV: DNS hijacking server started
+[09:36:21]I (869) WIFI_PROV: Registered captive URL: /generate_204
+[09:36:21]I (879) WIFI_PROV: Registered captive URL: /gen_204
+[09:36:21]I (879) WIFI_PROV: Registered wildcard redirect handler
+[09:36:21]I (889) WIFI_PROV: HTTP server started, connect to http://192.168.4.1
+[09:36:21]I (899) main_task: Returned from app_main()
+[09:36:26]I (5659) wifi:new:<1,1>, old:<1,1>, ap:<1,1>, sta:<255,255>, prof:1
+[09:36:26]I (5659) wifi:(trc)phytype:HT40-LGI, snr:38, maxRate:0, highestRateIdx:1
+[09:36:26]I (5659) wifi:(trc)rate(L-MCS7, schedIdx:1), ampdu(rate:L-MCS7, schedIdx(1, stop:8)), snr:38, ampduState:wait operational
+[09:36:26]I (5669) wifi:ifidx:1, rssi:-59, nf:-97, phytype(0x4, HT40-LGI), phymode(0x3, 11bgn), max_rate:0, he:0
+[09:36:26]I (5679) wifi:max ampdu length exponent:3(65535 bytes), mmss:5(4 us)
+[09:36:26]I (5689) wifi:station: 26:5d:d2:00:33:9a join, AID=1, bgn, 40U
+[09:36:26]W (5779) wifi:<ba-add>idx:4, ifx:1, tid:0, TAHI:0x1019a33, TALO:0xd25d26, (ssn:0, win:64, cur_ssn:0), CONF:0xc0000005
+[09:36:26]I (5839) esp_netif_lwip: DHCP server assigned IP to a client, IP is: 192.168.4.2
+[09:36:26]I (5869) wifi:[ADDBA]TX addba request, tid:0, dialogtoken:1, bufsize:64, A-MSDU:0(not supported), policy:1(IMR), ssn:0(0x0)
+[09:36:26]I (5879) wifi:[ADDBA]RX addba response, status:0, tid:0/tb:1(0xa1), bufsize:64, batimeout:0, txa_wnd:64
+[09:36:26]I (6019) WIFI_PROV: DNS request from 192.168.4.2 (len=31)
+[09:36:26]I (6019) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (47 bytes)
+[09:36:26]I (6019) WIFI_PROV: DNS request from 192.168.4.2 (len=38)
+[09:36:26]I (6029) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (54 bytes)
+[09:36:26]I (6069) WIFI_PROV: Captive portal detection handled (204 response)
+[09:36:26]I (6149) WIFI_PROV: DNS request from 192.168.4.2 (len=34)
+[09:36:26]I (6149) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (50 bytes)
+[09:36:26]I (6179) WIFI_PROV: DNS request from 192.168.4.2 (len=34)
+[09:36:26]I (6179) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (50 bytes)
+[09:36:26]I (6369) WIFI_PROV: DNS request from 192.168.4.2 (len=33)
+[09:36:26]I (6369) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (49 bytes)
+[09:36:27]I (6399) WIFI_PROV: DNS request from 192.168.4.2 (len=38)
+[09:36:27]I (6399) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (54 bytes)
+[09:36:27]I (6409) WIFI_PROV: DNS request from 192.168.4.2 (len=36)
+[09:36:27]I (6409) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (52 bytes)
+[09:36:27]I (6419) WIFI_PROV: DNS request from 192.168.4.2 (len=41)
+[09:36:27]I (6429) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (57 bytes)
+[09:36:27]I (6919) WIFI_PROV: DNS request from 192.168.4.2 (len=33)
+[09:36:27]I (6919) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (49 bytes)
+[09:36:27]W (6939) httpd_uri: httpd_uri: URI '/wifi/cw.html' not found
+[09:36:27]W (6939) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
+[09:36:27]I (7119) WIFI_PROV: Captive portal detection handled (204 response)
+[09:36:28]I (7969) WIFI_PROV: DNS request from 192.168.4.2 (len=45)
+[09:36:28]I (7969) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (61 bytes)
+[09:36:28]I (8359) WIFI_PROV: DNS request from 192.168.4.2 (len=35)
+[09:36:28]I (8359) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (51 bytes)
+[09:36:28]I (8379) WIFI_PROV: DNS request from 192.168.4.2 (len=38)
+[09:36:28]I (8379) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (54 bytes)
+[09:36:29]I (8409) WIFI_PROV: DNS request from 192.168.4.2 (len=36)
+[09:36:29]I (8409) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (52 bytes)
+[09:36:29]I (8449) WIFI_PROV: DNS request from 192.168.4.2 (len=40)
+[09:36:29]I (8449) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (56 bytes)
+[09:36:29]I (8459) WIFI_PROV: DNS request from 192.168.4.2 (len=42)
+[09:36:29]I (8459) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (58 bytes)
+[09:36:29]W (8469) httpd_uri: httpd_uri: URI '/mmtls/58378067' not found
+[09:36:29]W (8469) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
+[09:36:29]W (8489) httpd_uri: httpd_uri: URI '/mmtls/58378067' not found
+[09:36:29]W (8489) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
+[09:36:29]I (8729) WIFI_PROV: DNS request from 192.168.4.2 (len=28)
+[09:36:29]I (8729) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (44 bytes)
+[09:36:29]I (8749) WIFI_PROV: DNS request from 192.168.4.2 (len=28)
+[09:36:29]I (8749) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (44 bytes)
+[09:36:29]I (8749) WIFI_PROV: DNS request from 192.168.4.2 (len=31)
+[09:36:29]I (8759) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (47 bytes)
+[09:36:29]I (9179) WIFI_PROV: Captive portal detection handled (204 response)
+[09:36:29]I (9299) WIFI_PROV: DNS request from 192.168.4.2 (len=37)
+[09:36:29]I (9299) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (53 bytes)
+[09:36:29]I (9309) WIFI_PROV: Captive portal detection handled (204 response)
+[09:36:29]I (9379) WIFI_PROV: DNS request from 192.168.4.2 (len=35)
+[09:36:29]I (9379) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (51 bytes)
+[09:36:30]I (9739) WIFI_PROV: DNS request from 192.168.4.2 (len=39)
+[09:36:30]I (9739) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (55 bytes)
+[09:36:31]W (10469) httpd_parse: parse_block: incomplete (0/128) with parser error = 16
+[09:36:31]W (10469) httpd_txrx: httpd_resp_send_err: 400 Bad Request - Bad request syntax
+[09:36:32]I (12289) WIFI_PROV: DNS request from 192.168.4.2 (len=45)
+[09:36:32]I (12289) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (61 bytes)
+[09:36:33]W (12459) httpd_parse: parse_block: incomplete (0/128) with parser error = 16
+[09:36:33]W (12459) httpd_txrx: httpd_resp_send_err: 400 Bad Request - Bad request syntax
+[09:36:33]W (12529) httpd_uri: httpd_uri: URI '/mmtls/0f74e28d' not found
+[09:36:33]W (12529) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
+[09:36:33]W (12529) httpd_uri: httpd_uri: URI '/mmtls/0f74e28d' not found
+[09:36:33]W (12539) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
+[09:36:33]I (13239) WIFI_PROV: Captive portal detection handled (204 response)
+[09:36:35]I (14659) wifi:station: 26:5d:d2:00:33:9a leave, AID = 1, bss_flags is 33688675, bss:0x40822adc
+[09:36:35]I (14659) wifi:ifidx:1, rssi:-62, nf:-97, phytype(0x4, HT40-LGI), phymode(0x3, 11bgn), max_rate:0, he:0
+[09:36:35]I (14669) wifi:max ampdu length exponent:3(65535 bytes), mmss:5(4 us)
+[09:36:35]I (14679) wifi:new:<1,0>, old:<1,1>, ap:<1,1>, sta:<255,255>, prof:1
+[09:36:35]I (14679) wifi:<ba-del>idx:4, tid:0
+[09:36:38]I (17889) wifi:new:<1,1>, old:<1,0>, ap:<1,1>, sta:<255,255>, prof:1
+[09:36:38]I (17889) wifi:(trc)phytype:HT40-LGI, snr:31, maxRate:0, highestRateIdx:1
+[09:36:38]I (17899) wifi:(trc)rate(L-MCS6, schedIdx:2), ampdu(rate:L-MCS6, schedIdx(2, stop:8)), snr:31, ampduState:wait operational
+[09:36:38]I (17909) wifi:ifidx:1, rssi:-66, nf:-97, phytype(0x4, HT40-LGI), phymode(0x3, 11bgn), max_rate:0, he:0
+[09:36:38]I (17919) wifi:max ampdu length exponent:3(65535 bytes), mmss:5(4 us)
+[09:36:38]I (17919) wifi:station: 26:5d:d2:00:33:9a join, AID=1, bgn, 40U
+[09:36:38]W (18009) wifi:<ba-add>idx:4, ifx:1, tid:0, TAHI:0x1019a33, TALO:0xd25d26, (ssn:0, win:64, cur_ssn:0), CONF:0xc0000005
+[09:36:38]I (18039) esp_netif_lwip: DHCP server assigned IP to a client, IP is: 192.168.4.2
+[09:36:38]I (18069) wifi:[ADDBA]TX addba request, tid:0, dialogtoken:2, bufsize:64, A-MSDU:0(not supported), policy:1(IMR), ssn:0(0x0)
+[09:36:38]I (18069) wifi:[ADDBA]RX addba response, status:0, tid:0/tb:1(0xa1), bufsize:64, batimeout:0, txa_wnd:64
+[09:36:41]I (20999) WIFI_PROV: DNS request from 192.168.4.2 (len=28)
+[09:36:41]I (20999) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (44 bytes)
+[09:36:41]I (21009) WIFI_PROV: DNS request from 192.168.4.2 (len=28)
+[09:36:41]I (21009) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (44 bytes)
+[09:36:41]I (21019) WIFI_PROV: DNS request from 192.168.4.2 (len=31)
+[09:36:41]I (21019) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (47 bytes)
+[09:36:43]I (23119) WIFI_PROV: DNS request from 192.168.4.2 (len=38)
+[09:36:43]I (23119) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (54 bytes)
+[09:36:43]I (23119) WIFI_PROV: DNS request from 192.168.4.2 (len=31)
+[09:36:43]I (23129) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (47 bytes)
+[09:36:43]I (23159) WIFI_PROV: Captive portal detection handled (204 response)
+[09:36:43]I (23249) WIFI_PROV: DNS request from 192.168.4.2 (len=34)
+[09:36:43]I (23259) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (50 bytes)
+[09:36:43]I (23269) WIFI_PROV: DNS request from 192.168.4.2 (len=34)
+[09:36:43]I (23279) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (50 bytes)
+[09:36:44]I (23859) WIFI_PROV: DNS request from 192.168.4.2 (len=38)
+[09:36:44]I (23869) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (54 bytes)
+[09:36:44]W (23889) httpd_parse: parse_block: incomplete (0/128) with parser error = 16
+[09:36:44]W (23889) httpd_txrx: httpd_resp_send_err: 400 Bad Request - Bad request syntax
+[09:36:44]I (23919) WIFI_PROV: DNS request from 192.168.4.2 (len=36)
+[09:36:44]I (23919) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (52 bytes)
+[09:36:44]I (24189) WIFI_PROV: Captive portal detection handled (204 response)
+[09:36:46]I (25899) WIFI_PROV: DNS request from 192.168.4.2 (len=38)
+[09:36:46]I (25909) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (54 bytes)
+[09:36:46]I (25909) WIFI_PROV: DNS request from 192.168.4.2 (len=40)
+[09:36:46]I (25909) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (56 bytes)
+[09:36:46]I (25919) WIFI_PROV: DNS request from 192.168.4.2 (len=42)
+[09:36:46]I (25929) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (58 bytes)
+[09:36:46]W (25939) httpd_uri: httpd_uri: URI '/mmtls/11fc767d' not found
+[09:36:46]W (25939) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
+[09:36:46]W (25959) httpd_uri: httpd_uri: URI '/mmtls/11fc767d' not found
+[09:36:46]W (25959) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
+[09:36:46]W (25969) httpd_uri: httpd_uri: URI '/mmtls/11fc767d' not found
+[09:36:46]W (25969) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
+[09:36:46]W (25979) httpd_parse: parse_block: incomplete (0/128) with parser error = 16
+[09:36:46]W (25989) httpd_txrx: httpd_resp_send_err: 400 Bad Request - Bad request syntax
+[09:36:46]I (26249) WIFI_PROV: Captive portal detection handled (204 response)
+[09:36:46]I (26289) WIFI_PROV: DNS request from 192.168.4.2 (len=37)
+[09:36:46]I (26289) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (53 bytes)
+[09:36:46]I (26309) WIFI_PROV: Captive portal detection handled (204 response)
+[09:36:47]I (26829) WIFI_PROV: DNS request from 192.168.4.2 (len=39)
+[09:36:47]I (26829) WIFI_PROV: DNS response sent: all domains -> 192.168.4.1 (55 bytes)
+[09:36:48]W (27949) httpd_uri: httpd_uri: URI '/mmtls/6d835923' not found
+[09:36:48]W (27949) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI
+[09:36:48]W (27959) httpd_uri: httpd_uri: URI '/mmtls/6d835923' not found
+[09:36:48]W (27959) httpd_txrx: httpd_resp_send_err: 404 Not Found - Nothing matches the given URI

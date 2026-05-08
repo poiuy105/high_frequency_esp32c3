@@ -363,6 +363,7 @@ void wifi_prov_start(void)
     httpd_config_t config = HTTPD_DEFAULT_CONFIG();
     config.server_port = 80;
     config.lru_purge_enable = true;
+    config.uri_match_fn = httpd_uri_match_wildcard;  // 启用通配符匹配
 
     if (httpd_start(&prov_server, &config) == ESP_OK) {
         // 注册主页处理
@@ -405,6 +406,7 @@ void wifi_prov_start(void)
         }
 
         // 注册通配符处理 - 用于其他所有请求重定向到主页（Captive Portal关键）
+        // ESP-IDF 使用 /* 作为通配符，需要启用 httpd_uri_match_wildcard
         httpd_uri_t catch_all_uri = {
             .uri = "/*",
             .method = HTTP_GET,
@@ -413,7 +415,7 @@ void wifi_prov_start(void)
         };
         esp_err_t ret = httpd_register_uri_handler(prov_server, &catch_all_uri);
         if (ret == ESP_OK) {
-            ESP_LOGI(TAG, "Registered wildcard redirect handler");
+            ESP_LOGI(TAG, "Registered wildcard redirect handler for /*");
         } else {
             ESP_LOGW(TAG, "Failed to register wildcard handler (err=%d)", ret);
         }

@@ -14,9 +14,11 @@ __pycache__/
 
 # IDE
 .vscode/
+.claude/
 .idea/
 *.swp
 *.swo
+.codeartsdoer/
 *~
 
 # Logs
